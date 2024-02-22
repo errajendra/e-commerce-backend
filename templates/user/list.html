@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block bc %}
+<li class="breadcrumb-item">Users</li>
+{% endblock bc %}
+{% block content %}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+                <h3 class="mb-0">{{title}} </h3>
+            </div>
+            {% csrf_token %}
+            <!-- Light table -->
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush" id="example1">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" class="sort" data-sort="name">SN</th>
+                        <th scope="col" class="sort" data-sort="name">Name</th>
+                        <th scope="col" class="sort" data-sort="budget">Mobile</th>
+                        <th scope="col">Active</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    {% for user in users %}
+                    <tr>
+                        <td class="budget">
+                            {{forloop.counter}}
+                        </td>
+                        <th scope="row">
+                            <div class="media align-items-center">
+                            {% comment %} <a href="#" class="avatar rounded-circle mr-3">
+                                <img alt="Image placeholder" src="../assets/img/theme/sketch.jpg">
+                            </a> {% endcomment %}
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">{{user.name}} </span>
+                                {% if user.email %}
+                                <p class="name mb-0 text-xs">{{user.email}} </p>
+                                {% endif %}
+                            </div>
+                            </div>
+                        </th>
+                        <td>
+                            {{user.mobile}}
+                        </td>
+                        <td>
+                        {% if user.is_active %}
+                        <select class="border-0 userStatus" data-user-id="{{ user.id }}">
+                            <option value="1" {% if user.is_active %}selected{% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_active %}selected{% endif %}>No</option>
+                        </select>
+                      {% else %}
+                       <select class="border-0 userStatus" data-user-id="{{ user.id }}">
+                            <option value="1" {% if user.is_active %}selected{% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_active %}selected{% endif %}>No</option>
+                        </select>
+                        {% endif %}
+                        </td>
+                        <td>
+                            {{user.date_joined|date}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+    <script>
+    new DataTable('#example1', {
+        responsive: true,
+    });
+    </script>
+    <script>
+        $(document).on('change', '.userStatus', function(e) {
+            var user_id = $(this).data('user-id');
+            var new_status = $(this).val();
+            var url = "{% url 'update-user-active-ajax' %}";
+            
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    'user_id': user_id,
+                    'new_status': new_status,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        console.log('User status updated successfully');
+                    
+                    } else {
+                        console.error('Error updating user status:', data.error);
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock javascripts %}
