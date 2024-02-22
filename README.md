@@ -1,5 +1,5 @@
 # astroStone
-,
+
 AstroStone E-Commerce Website using Django, (Python), Django Rest Framwork(DRF), Postgres and React.
 
 1. clone the project using 
