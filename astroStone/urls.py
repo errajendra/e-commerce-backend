@@ -27,8 +27,11 @@ admin.site.index_title = "Administration"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('user.urls')),
     path("", render_index_page),
+    path("ckeditor5/", include('django_ckeditor_5.urls'),
+         name="ck_editor_5_upload_file"),
+    path('user/', include('user.urls')),
+    path('ecommerce/', include('ecommerce.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

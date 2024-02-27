@@ -61,21 +61,34 @@
       <li class="nav-item {% if request.resolver_match.view_name == 'users' %} active {% endif %}">
         <a href="{% url 'users' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-user"></i>
-
+            <i class="fas fa-users"></i>
           </span>
           <span class="sidebar-text">Customers</span>
         </a>
       </li>
-      
-      {% comment %} <li class="nav-item {% if request.resolver_match.view_name == 'plan_purchase_list' %} active {% endif %}">
-        <a href="{% url 'plan_purchase_list' %}" class="nav-link">
+
+      <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
+      <li class="nav-item mb-4">
+        <div class="text-italic nav-title text-muted">E-Commerce</div>
+      </li>
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_categories' %} active {% endif %}">
+        <a href="{% url 'list_categories' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-calendar"></i>
+            <i class="fas fa-network-wired"></i>
           </span>
-          <span class="sidebar-text">Plan Purchase</span>
+          <span class="sidebar-text">Category</span>
         </a>
-      </li> {% endcomment %}
+      </li>
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_products' %} active {% endif %}">
+        <a href="{% url 'list_products' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-images"></i>
+          </span>
+          <span class="sidebar-text">Products</span>
+        </a>
+      </li>
 
       {% endif %}
     </ul>

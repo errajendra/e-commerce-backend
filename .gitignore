@@ -8,6 +8,8 @@
 !**/migrations
 !**/migrations/__init__.py
 __pycache__/*
-media/
+media/*/
 venv/
 .DS_Store
+**/tests.py
+/unit_test

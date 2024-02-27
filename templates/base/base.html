@@ -44,9 +44,19 @@
 
       {% include 'includes/navigation.html' %}
 
+      {% comment %} Django messages {% endcomment %}
+      {% if messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {% for message in messages %}
+              {{ message|capfirst }}
+          {% endfor %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
       {% block content %}{% endblock content %} 
 
-<!--      {% include 'includes/settings-box.html' %}-->
+      <!--  {% include 'includes/settings-box.html' %}-->
 
       {% include 'includes/footer.html' %}
 
