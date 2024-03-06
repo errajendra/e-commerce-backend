@@ -50,3 +50,44 @@ class ProductReviewAdmmin(admin.ModelAdmin):
     search_fields = (
         'product__name', 'product__sub_name', 'product__description', 
         'user__name', 'user__email', 'user__mobile_number')
+
+
+
+@admin.register(Cart)
+class cartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'created_at')
+    list_filter = ('quantity', 'created_at')
+    search_fields = (
+        'product__name', 'product__sub_name', 'product__description', 
+        'user__name', 'user__email', 'user__mobile_number')
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'user', 'total_price', 'status', 
+        'created_at', 'updated_at'
+    ]
+    list_filter = ('status', 'created_at', 'updated_at')
+    search_fields = ('user__name', 'user__mobile_number', 'user__email')
+
+
+
+@admin.register(OrderProduct)
+class OrderDetailAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'order', 'product', 'quantity', 'price',
+        'created_at', 'updated_at'
+    ]
+    list_filter = ('created_at', 'updated_at')
+    search_fields = ('order__user__name', 'order__user__mobile_number', 'order__user__email')
+
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'order', 'amount', 'status')
+    list_filter = ('status',)
+    search_fields = (
+        'user__name', 'user__mobile_number', 'user__email', 
+        'order__id')

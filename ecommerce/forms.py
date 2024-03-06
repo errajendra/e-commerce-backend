@@ -43,6 +43,9 @@ class ProductForm(forms.ModelForm):
             "benefits": CKEditor5Widget(
                 attrs={"class": "django_ckeditor_5"}, config_name="default"
             ),
+            "cons": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="default"
+            ),
             "how_to_use": CKEditor5Widget(
                 attrs={"class": "django_ckeditor_5"}, config_name="default"
             )

@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+                <h3 class="mb-0">{{title}} </h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+                <table class="table table-hover" id="example1">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" class="sort">SN</th>
+                        <th scope="col" class="sort">Order-ID</th>
+                        <th scope="col" class="sort">User</th>
+                        <th scope="col" class="sort">Amount</th>
+                        <th scope="col" class="sort">Status</th>
+                        <th scope="col" class="sort">Date</th>
+                        <th scope="col" class="sort">Items</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    {% for order in orders %}
+                    <tr>
+                        <td class="budget">
+                            {{forloop.counter}}
+                        </td>
+                        <td>
+                            {{order.id}}
+                        </td>
+                        <td>
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">{{order.user.name}} </span>
+                                {% if order.user.email %}
+                                <p class="name mb-0 text-xs">{{order.user.email}} </p>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {{order.total_price|floatformat:2}}
+                        </td>
+                        <td class="{% if order.status == 'PENDING' %}text-info {% elif order.status == 'SUCCESS' %} text-success {% else %} text-danger {% endif %}">
+                            {{order.status}}
+                        </td>
+                        <td>
+                            {{order.created_at}}
+                        </td>
+                        <td>
+                            <table class="table">
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                                {% for items in order.order_products.all %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{items.product.name}}</td>
+                                    <td>{{items.quantity}}</td>
+                                    <td>{{items.price|floatformat:2}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
+</div>
+{% endblock content %}

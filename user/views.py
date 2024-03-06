@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CustomUser as User
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from .models import CustomUser as User
+from ecommerce.models import (
+    Product,  Category,
+)
 
 
 
@@ -10,7 +12,9 @@ from django.db.models import Sum
 def index(request):
     """ Dashbord Page."""
     context = {}
-    context["users"] = User.objects.filter(is_active=True).count()
+    context["total_user"] = User.objects.count()
+    context["total_categories"] = Category.objects.count()
+    context["total_products"] = Product.objects.count()
     
     return render(request, 'user/index.html', context)
 

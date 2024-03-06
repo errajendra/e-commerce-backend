@@ -5,8 +5,10 @@ from .forms import (
     CategoryForm, ProductForm, ProductFAQsForm, ProductReviewForm,
 )
 from .models import (
-    Category, Product, ProductFAQ, ProductReview,
+    Category, Product, ProductFAQ, ProductReview, Cart,
+    Order, Transaction
 )
+from user.models import CustomUser as User
 
 
 def add_category(request):
@@ -47,6 +49,9 @@ def delete_category(request, pk):
     return redirect('list_categories')
 
 
+"""
+Product Views
+"""
 def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, files=request.FILES or None)
@@ -85,13 +90,16 @@ def delete_product(request, pk):
     return redirect('list_products')
 
 
+"""
+Product FAQs Views
+"""
 def add_productfaq(request):
     if request.method == 'POST':
         form = ProductFAQsForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Product FAQ added successfully')
-            return redirect('list_productfaq')
+            return redirect('list_productfaqs')
     else:
         form = ProductFAQsForm()
     return render(request, 'forms/form.html', {'form': form})
@@ -104,7 +112,7 @@ def update_productfaq(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Product FAQ updated successfully')
-            return redirect('list_productfaq')
+            return redirect('list_productfaqs')
     else:
         form = ProductFAQsForm(instance=productfaq)
     return render(request, 'forms/form.html',
@@ -112,8 +120,12 @@ def update_productfaq(request, pk):
 
 
 def list_productfaqs(request):
-    productfaqs = ProductFAQ.objects.all()
-    return render(request, 'list_productfaqs.html', {'productfaqs': productfaqs})
+    products = Product.objects.select_related().all()
+    context = {
+        'title': "Products FAQs",
+        'products': products
+    }
+    return render(request, 'ecommerce/products-faqs-list.html', context)
 
 
 def delete_productfaq(request, pk):
@@ -123,13 +135,16 @@ def delete_productfaq(request, pk):
     return redirect('list_productfaqs')
 
 
+"""
+Product Reviews
+"""
 def add_productreview(request):
     if request.method == 'POST':
         form = ProductReviewForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Product Review added successfully')
-            return redirect('list_productreview')
+            return redirect('list_productreviews', id=request.POST['product'])
     else:
         form = ProductReviewForm()
     return render(request, 'forms/form.html', {'form': form})
@@ -142,20 +157,56 @@ def update_productreview(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Product Review updated successfully')
-            return redirect('list_productreview')
+            return redirect('list_productreviews', id=productreview.product.id)
     else:
         form = ProductReviewForm(instance=productreview)
     return render(request, 'forms/form.html',
-     {'form': form, 'title': "Update"})
+     {'form': form, 'title': "Update Review"})
 
 
-def list_productreviews(request):
-    productreviews = ProductReview.objects.all()
-    return render(request, 'list_productreviews.html', {'productreviews': productreviews})
+def list_productreviews(request, id):
+    product = Product.objects.select_related().get(id=id)
+    return render(
+        request, 'ecommerce/product-reviews.html', {'product': product})
 
 
 def delete_productreview(request, pk):
     productreview = get_object_or_404(ProductReview, id=pk)
     productreview.delete()
     messages.success(request, 'Product Review deleted successfully')
-    return redirect('list_productreviews')
+    return redirect('list_productreviews', id=productreview.product.id)
+
+
+
+
+""" Cart Views """
+def user_cart_list(request, pk):
+    """ All Cart Items of Perticular User. """
+    user = get_object_or_404(User, id=pk)
+    context = {
+        'title': f"{user.name} - Cart Items",
+        'carts': Cart.objects.select_related().filter(user=user)
+    }
+    return render(request, 'cart/user-cart.html', context)
+
+
+def delete_cart(request, pk):
+    """ Delete cart item. """
+    cart = get_object_or_404(Cart, id=pk)
+    user = cart.user
+    cart.delete()
+    messages.success(request, 'Cart Item deleted successfully')
+    return redirect(user_cart_list(request, user.id))
+
+
+
+""" 
+Order Views
+"""
+def order_list(request):
+    """ All Orders. """
+    context = {
+        'title': f"Orders",
+        'orders': Order.objects.select_related().all()
+    }
+    return render(request, 'order/list.html', context)
