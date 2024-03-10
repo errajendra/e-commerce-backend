@@ -203,10 +203,37 @@ def delete_cart(request, pk):
 """ 
 Order Views
 """
-def order_list(request):
+def order_list(request, user_id=None):
     """ All Orders. """
+    if user_id:
+        user = get_object_or_404(User, id=user_id)
+        title = f"Orders of - {user.name}"
+        orders = Order.objects.select_related().filter(user=user)
+    else:
+        title = "Orders"
+        orders = Order.objects.select_related().all()
     context = {
-        'title': f"Orders",
-        'orders': Order.objects.select_related().all()
+        'title': title,
+        'orders': orders
     }
     return render(request, 'order/list.html', context)
+
+
+
+""" 
+Transaction list views
+"""
+def transaction_list(request, user_id=None):
+    """ All transactions. """
+    if user_id:
+        user = get_object_or_404(User, id=user_id)
+        title = f"Transactions of - {user.name}"
+        transactions = Transaction.objects.select_related().filter(user=user)
+    else:
+        title = "Transactions"
+        transactions = Transaction.objects.select_related().all()
+    context = {
+        'title': title,
+        'transactions': transactions
+    }
+    return render(request, 'transaction/list.html', context)

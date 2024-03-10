@@ -107,6 +107,13 @@ class OrderCartProduct(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     
     def create(self, request, *args, **kwargs):
+        address_serializer = TakeUserAddressZipOrderSerializer(data=request.data)
+        
+        if address_serializer.is_valid(raise_exception=True):
+            print( address_serializer.validated_data)
+            delivery_address = address_serializer.validated_data['delivery_address']
+            delivery_zip_code = address_serializer.validated_data['delivery_zip_code']
+            
         user = request.user
         cart_items = user.cart.select_related().all()
         
@@ -121,7 +128,9 @@ class OrderCartProduct(ModelViewSet):
         
         order = Order.objects.create(
             user = user,
-            total_price = total_price
+            total_price = total_price,
+            delivery_address = delivery_address,
+            delivery_zip_code = delivery_zip_code
         )
         order.save()
         order_products_qs = []
@@ -134,7 +143,14 @@ class OrderCartProduct(ModelViewSet):
                     price = cart.quantity * cart.product.price
                 )
             )
-        OrderProduct.objects.bulk_create(order_products_qs)
+        try:
+            OrderProduct.objects.bulk_create(order_products_qs)
+        except Exception as e:
+            return Response(
+                data={
+                    "message": f"{str(e)}"
+                },
+                status=status.HTTP_400_BAD_REQUEST)
         cart_items.delete()
         return Response(
             status=status.HTTP_201_CREATED,
@@ -148,10 +164,33 @@ class OrderCartProduct(ModelViewSet):
 """
 Order List Viewset
 """
-class OrderList(ModelViewSet):
+class OrderListView(ModelViewSet):
     http_method_names = ('get',)
     permission_classes = (IsAuthenticated,)
     serializer_class = OrderSerializer
     
     def get_queryset(self):
         return self.request.user.orders.all()
+
+
+
+"""
+User Transaction List Viewset
+"""
+class TransactionListView(ModelViewSet):
+    http_method_names = ('get',)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TransactionSerializer
+    
+    def get_queryset(self):
+        return self.request.user.transactions.all()
+
+
+
+""" User Address View. """
+class UserAddressView(ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserAddressSerializer
+    
+    def get_queryset(self):
+        return UserAddress.objects.filter(user=self.request.user)

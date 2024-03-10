@@ -3,7 +3,8 @@ from django.urls import path, include
 from .views import (
     CategoryView, ProductView, CartView,
     ProductReviewView,
-    OrderCartProduct, OrderList,
+    OrderCartProduct, OrderListView, TransactionListView,
+    UserAddressView,
 )
 
 router = DefaultRouter()
@@ -13,7 +14,9 @@ router.register('products', ProductView, basename='products')
 router.register('cart', CartView, basename='cart')
 router.register('product-review', ProductReviewView, basename='product-review')
 router.register('order-cart-product', OrderCartProduct, basename='order-from-cart')
-router.register('orders', OrderList, basename='orders')
+router.register('address', UserAddressView, basename='address')
+router.register('orders', OrderListView, basename='orders')
+router.register('transactions', TransactionListView, basename='transactions')
 
 urlpatterns = [
     # router.urls is a list of URL patterns that are automatically created by

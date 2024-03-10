@@ -1,9 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import CustomUser as User
 from ecommerce.models import (
-    Product,  Category,
+    Product,  Category, Order,
+)
+from .forms import (
+    UserUpdateForm,
 )
 
 
@@ -15,6 +19,8 @@ def index(request):
     context["total_user"] = User.objects.count()
     context["total_categories"] = Category.objects.count()
     context["total_products"] = Product.objects.count()
+    context["total_orders"] = Order.objects.count()
+    context["orders"] = Order.objects.filter(status="PENDING")
     
     return render(request, 'user/index.html', context)
 
@@ -56,3 +62,28 @@ def user_list(request):
     }
     return render(request, 'user/list.html', context)
 
+
+@login_required
+def user_update(request, id):
+    """ Single Customer Update View. """
+    user = get_object_or_404(User, id=id)
+    form = UserUpdateForm(instance=user)
+    if request.method == "POST":
+        form = UserUpdateForm(data=request.POST, files=request.FILES, instance=user)
+        if form.is_valid():
+            messages.success(request, f'Profile updated successfully!')
+            return redirect('users')
+    
+    context = {
+        'form': form,  
+        'title': 'Edit Profile'
+    }
+    return render(request, 'forms/form.html', context)
+
+
+@login_required
+def user_delete(request, id):
+    """  Delete a single customer from the database."""
+    user = get_object_or_404(User, id=id)
+    user.delete()
+    return redirect('users')

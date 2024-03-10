@@ -3,6 +3,17 @@ from .models import *
 
 
 
+@admin.register(UserAddress)
+class UserAddressAdmin(admin.ModelAdmin):
+    list_display = (
+        'user', 'house_number','street', 'city', 'state',
+        'zip_code', 'country', 'is_default')
+    search_fields = (
+        'street', 'city', 'state', 'zip_code', 'country',
+        'user__name', 'user__mobile_number', 'user__email')
+    list_filter = ('is_default',)
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'created_at')
@@ -65,11 +76,13 @@ class cartAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'user', 'total_price', 'status', 
+        'id', 'user', 'total_price', 'status',
+        'delivery_address', 'delivery_zip_code',
         'created_at', 'updated_at'
     ]
     list_filter = ('status', 'created_at', 'updated_at')
-    search_fields = ('user__name', 'user__mobile_number', 'user__email')
+    search_fields = (
+        'user__name', 'user__mobile_number', 'user__email',)
 
 
 
@@ -86,8 +99,8 @@ class OrderDetailAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'order', 'amount', 'status')
-    list_filter = ('status',)
+    list_display = ('id', 'user', 'order', 'amount', 'status', 'mode', 'tracking_id',)
+    list_filter = ('status', 'mode',)
     search_fields = (
         'user__name', 'user__mobile_number', 'user__email', 
-        'order__id')
+        'order__id', 'tracking_id',)

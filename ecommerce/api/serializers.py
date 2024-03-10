@@ -3,6 +3,7 @@ from django.db.models import Avg
 from ..models import (
     Category, Product, ProductFAQ, ProductReview,
     Cart, Order, OrderProduct, Transaction,
+    UserAddress,
 )
 from user.api.serializers import UserInfoSerializer
 
@@ -188,13 +189,21 @@ class OrderItemsSerialiser(serializers.ModelSerializer):
 
 
 
+""" Order from Cart Serializer. """
+class TakeUserAddressZipOrderSerializer(serializers.Serializer):
+    delivery_address = serializers.CharField(max_length=250)
+    delivery_zip_code = serializers.CharField(max_length=10)
+
+
+
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Order
         fields = [
-            'id', 'user', 'total_price', 'status', 
+            'id', 'user', 'total_price', 'status',
+            'delivery_address', 'delivery_zip_code',
             'created_at', 'updated_at'
         ]
     
@@ -214,3 +223,15 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'user', 'order', 'amount', 'status',
             'created_at', 'updated_at')
+
+
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    """
+    A serializer for the UserAddress model.
+    """
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    
+    class Meta:
+        model = UserAddress
+        fields = '__all__'

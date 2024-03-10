@@ -4,6 +4,36 @@ from user.models import BaseModel, CustomUser as User, _
 
 
 
+
+class UserAddress(BaseModel):
+    """
+    A model representing a user's address.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    house_number = models.CharField('House Number', max_length=20, null=True, blank=True)
+    street = models.CharField('Street Address', max_length=250)
+    city = models.CharField('City', max_length=100)
+    state = models.CharField('State', max_length=100)
+    zip_code = models.CharField('Zip Code', max_length=10)
+    country = models.CharField('Country', default="India", max_length=50)
+    is_default = models.BooleanField('Is Default', default=False)
+
+    def __str__(self):
+        """
+        Returns the user and address for the user address.
+        """
+        return "{} {}, {}, {} - {}, {}".format(self.house_number, self.street, self.city, self.state, self.zip_code, self.country)
+    
+    @property
+    def full_address(self):
+        return  "{} {}, {}, {}, {}".format(self.house_number, self.street, self.city, self.state, self.country)
+    
+    class Meta:
+        verbose_name = _("User Address")
+        verbose_name_plural = _("User Addresses")
+
+
+
 class Category(BaseModel):
     """
     A model representing a product category.
@@ -161,18 +191,28 @@ class Order(BaseModel):
     ORDER_STATUS_CHOICES = (
         ("PENDING", "PENDING"),
         ("ORDERED", "ORDERED"),
+        ("IN-PROGRESS", "IN-PROGRESS"),
         ("DELIVERED", "DELIVERED"),
         ("FAILED", "FAILED"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     total_price = models.FloatField(default=0)
-    status = models.CharField(max_length=10, choices=ORDER_STATUS_CHOICES, default="PENDING")
+    status = models.CharField(max_length=12, choices=ORDER_STATUS_CHOICES, default="PENDING")
+    delivery_address = models.CharField(_("Delivery Address"), max_length=250, null=True, blank=True)
+    delivery_zip_code = models.CharField(_("Delivery ZIP Code"), max_length=10, null=True, blank=True)
 
     def __str__(self):
         """
         Returns the user and order date for the order.
         """
         return f'{self.user} - {self.created_at}'
+    
+    @property
+    def order_id(self):
+        """
+        This is an id to show only
+        """
+        return f"#{str(self.pk).zfill(3)}"
     
 
 
@@ -207,10 +247,25 @@ class Transaction(BaseModel):
         ("SUCCESS", "SUCCESS"),
         ("FAILED", "FAILED"),
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='transactions')
     amount = models.FloatField()
     status = models.CharField(max_length=10, choices=TRANSACTION_STATUS_CHOICES, default="PENDING")
+    mode = models.CharField(
+        _("Transaction Mode"),
+        max_length=10,
+        choices=(
+            ("CASH", 'CASH'),
+            ("ONLINE", 'ONLINE'),
+            ),
+        default="CASH")
+    
+    # Bank Transaction  Details
+    tracking_id = models.CharField(
+        _("Bank Tracking/UTR Number"),
+        max_length=100,
+        null = True, blank=True
+    )
 
     def __str__(self):
         """

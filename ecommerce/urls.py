@@ -4,6 +4,8 @@ from .views import *
 urlpatterns = [
     # Api
     path('api/', include('ecommerce.api.urls')),
+    # Ajax
+    path('ajax/', include('ecommerce.ajax.urls')),
     
     # Category Urls
     path('add-category/', add_category, name='add_category'),
@@ -35,4 +37,9 @@ urlpatterns = [
     
     # Order Urls
     path('orders/', order_list, name="orders"),
+    path('orders/<int:user_id>/', order_list, name="user-orders"),
+    
+    # Transactions Urls
+    path('transactions/', transaction_list, name="transactions"),
+    path('transactions/<int:user_id>/', transaction_list, name="user-tnxs"),
 ]
