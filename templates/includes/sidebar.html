@@ -84,6 +84,15 @@
           <span class="sidebar-text">Product FAQs</span>
         </a>
       </li>
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_banners' %} active {% endif %}">
+        <a href="{% url 'list_banners' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-list"></i>
+          </span>
+          <span class="sidebar-text">Banners</span>
+        </a>
+      </li>
       
       {% endif %}
     </ul>

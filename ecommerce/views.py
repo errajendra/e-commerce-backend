@@ -3,10 +3,12 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .forms import (
     CategoryForm, ProductForm, ProductFAQsForm, ProductReviewForm,
+    BannerForm,
 )
 from .models import (
     Category, Product, ProductFAQ, ProductReview, Cart,
-    Order, Transaction
+    Order, Transaction,
+    Banner,
 )
 from user.models import CustomUser as User
 
@@ -176,6 +178,48 @@ def delete_productreview(request, pk):
     messages.success(request, 'Product Review deleted successfully')
     return redirect('list_productreviews', id=productreview.product.id)
 
+
+
+
+"""
+Product Reviews
+"""
+def add_banner(request):
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return redirect('list_banners')
+    else:
+        form = BannerForm()
+    return render(request, 'forms/form.html', {'form': form})
+
+
+def update_banner(request, pk):
+    banner = Banner.objects.get(id=pk)
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES or None, instance=banner)
+        if form.is_valid():
+            form.save()
+            return redirect('list_banners')
+    else:
+        form = BannerForm(instance=banner)
+    return render(request, 'forms/form.html',
+     {'form': form, 'title': "Update Banner"})
+
+
+def list_banners(request):
+    banner = Banner.objects.all()
+    return render(
+        request, 'ecommerce/banners.html', {
+            'title': 'Banners',
+            'banners': banner})
+
+
+def delete_banner(request, pk):
+    banner = get_object_or_404(Banner, id=pk)
+    banner.delete()
+    return redirect('list_banners')
 
 
 

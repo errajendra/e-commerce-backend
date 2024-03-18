@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db.models import Avg
 from ..models import (
-    Category, Product, ProductFAQ, ProductReview,
+    Category, Product, ProductFAQ, ProductReview, Banner,
     Cart, Order, OrderProduct, Transaction,
     UserAddress,
 )
@@ -15,7 +15,17 @@ from user.api.serializers import UserInfoSerializer
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'image')
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["rating"] = round(ProductReview.objects.filter(
+            product__category=instance
+            ).aggregate(Avg('rating'))['rating__avg'] or 0)
+        data["sold_items"] = OrderProduct.objects.filter(
+            product__category=instance
+            ).aggregate(Avg('quantity'))['quantity__avg'] or 0
+        return data
 
 
 
@@ -235,3 +245,13 @@ class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
         fields = '__all__'
+
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    """
+    A serializer for the Banner model.
+    """
+    class Meta:
+        model = Banner
+        fields = ("title", "image")

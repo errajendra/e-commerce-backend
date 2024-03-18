@@ -4,12 +4,20 @@ from user.models import BaseModel, CustomUser as User, _
 
 
 
+class Banner(models.Model):
+    image = models.ImageField()
+    title = models.CharField(max_length=50)
+
+
 
 class UserAddress(BaseModel):
     """
     A model representing a user's address.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    name = models.CharField('House Number', max_length=50, null=True, blank=True)
+    mobile_number = models.CharField('Mobile Number', max_length=15, null=True, blank=True)
+    email = models.EmailField('Delivery Email', null=True, blank=True)
     house_number = models.CharField('House Number', max_length=20, null=True, blank=True)
     street = models.CharField('Street Address', max_length=250)
     city = models.CharField('City', max_length=100)
@@ -40,6 +48,7 @@ class Category(BaseModel):
     """
     name = models.CharField("Name", max_length=100)
     description = models.TextField('Description', blank=True, null=True)
+    image = models.ImageField(upload_to='category/', default="product-default.jpg")
 
     def __str__(self):
         return self.name

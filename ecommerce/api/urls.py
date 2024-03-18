@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from .views import (
-    CategoryView, ProductView, CartView,
+    CategoryView, ProductView, CartView, BannerView,
     ProductReviewView,
     OrderCartProduct, OrderListView, TransactionListView,
     UserAddressView,
@@ -9,6 +9,7 @@ from .views import (
 
 router = DefaultRouter()
 
+router.register('banners', BannerView, basename='banners')
 router.register('categories', CategoryView, basename='categories')
 router.register('products', ProductView, basename='products')
 router.register('cart', CartView, basename='cart')

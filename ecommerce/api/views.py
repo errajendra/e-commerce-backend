@@ -18,6 +18,16 @@ class CategoryView(ModelViewSet):
     pagination_class = None
     
 
+"""
+    Banner Listing Viewsets
+"""
+class BannerView(ModelViewSet):
+    http_method_names = ('get',)
+    serializer_class = BannerSerializer
+    queryset = Banner.objects.all()
+    pagination_class = None
+    
+
 
 """
     Product Listing and Detail Viewset

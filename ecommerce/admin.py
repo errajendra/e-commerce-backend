@@ -6,9 +6,11 @@ from .models import *
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
     list_display = (
-        'user', 'house_number','street', 'city', 'state',
+        'user', 'name', 'email', 'mobile_number',
+        'house_number','street', 'city', 'state',
         'zip_code', 'country', 'is_default')
     search_fields = (
+        'name', 'email', 'mobile_number',
         'street', 'city', 'state', 'zip_code', 'country',
         'user__name', 'user__mobile_number', 'user__email')
     list_filter = ('is_default',)
@@ -104,3 +106,9 @@ class TransactionAdmin(admin.ModelAdmin):
     search_fields = (
         'user__name', 'user__mobile_number', 'user__email', 
         'order__id', 'tracking_id',)
+
+
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ('title',)

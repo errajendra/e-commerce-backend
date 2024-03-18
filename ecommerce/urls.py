@@ -31,6 +31,12 @@ urlpatterns = [
     path('list-productreviews/<int:id>/', list_productreviews, name='list_productreviews'),
     path('delete-productreview/<int:pk>/', delete_productreview, name='delete_productreview'),
     
+    # Banner  Urls
+    path('add-banner/', add_banner, name='add_banner'),
+    path('update-banner/<int:pk>/', update_banner, name='update_banner'),
+    path('list-banners/', list_banners, name='list_banners'),
+    path('delete-banner/<int:pk>/', delete_banner, name='delete_banner'),
+    
     # Cart  Urls
     path('list-user-cart/<int:pk>/', user_cart_list, name='list_user_cart'),
     path('delete-cart/<int:pk>/', delete_cart, name='delete_cart'),
