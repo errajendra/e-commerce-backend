@@ -104,13 +104,13 @@ Product Reviews Viewset
 """
 class ProductReviewView(ModelViewSet):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated,)
     serializer_class = ProductReviewSerializer
     
     def get_queryset(self):
-        return ProductReview.objects.select_related().filter(user=self.request.user)
+        return ProductReview.objects.select_related().all()
     
     def create(self, request, *args, **kwargs):
+        self.permission_classes = (IsAuthenticated,)
         data = super().create(request, *args, **kwargs)
         return Response(data.data)
 
