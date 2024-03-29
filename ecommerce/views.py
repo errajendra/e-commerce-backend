@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .forms import (
     CategoryForm, ProductForm, ProductFAQsForm, ProductReviewForm,
-    BannerForm,
+    BannerForm, BlogForm,
 )
 from .models import (
     Category, Product, ProductFAQ, ProductReview, Cart,
     Order, Transaction,
     Banner,
+    Blog,
 )
 from user.models import CustomUser as User
 
@@ -182,7 +183,7 @@ def delete_productreview(request, pk):
 
 
 """
-Product Reviews
+Banner Views
 """
 def add_banner(request):
     if request.method == 'POST':
@@ -220,6 +221,51 @@ def delete_banner(request, pk):
     banner = get_object_or_404(Banner, id=pk)
     banner.delete()
     return redirect('list_banners')
+
+
+
+
+
+"""
+Banner Views
+"""
+def add_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return redirect('list_blogs')
+    else:
+        form = BlogForm()
+    return render(request, 'forms/form.html', {'form': form})
+
+
+def update_blog(request, pk):
+    blog = Blog.objects.get(id=pk)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES or None, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('list_blogs')
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'forms/form.html',
+     {'form': form, 'title': "Update Blog"})
+
+
+def list_blogs(request):
+    blog = Blog.objects.all()
+    return render(
+        request, 'ecommerce/blogs.html', {
+            'title': 'Blogs',
+            'blogs': blog})
+
+
+def delete_blog(request, pk):
+    blog = get_object_or_404(Blog, id=pk)
+    blog.delete()
+    return redirect('list_blogs')
+
 
 
 

@@ -94,6 +94,16 @@
         </a>
       </li>
       
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_blogs' %} active {% endif %}">
+        <a href="{% url 'list_blogs' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-list"></i>
+          </span>
+          <span class="sidebar-text">Blogs</span>
+        </a>
+      </li>
+      
       {% endif %}
     </ul>
   </div>

@@ -5,12 +5,14 @@ from .views import (
     ProductReviewView,
     OrderCartProduct, OrderListView, TransactionListView,
     UserAddressView,
+    BlogView,
 )
 
 router = DefaultRouter()
 
 router.register('banners', BannerView, basename='banners')
 router.register('categories', CategoryView, basename='categories')
+router.register('blogs', BlogView, basename='blogs')
 router.register('products', ProductView, basename='products')
 router.register('cart', CartView, basename='cart')
 router.register('product-review', ProductReviewView, basename='product-review')

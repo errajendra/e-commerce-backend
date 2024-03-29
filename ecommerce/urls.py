@@ -37,6 +37,12 @@ urlpatterns = [
     path('list-banners/', list_banners, name='list_banners'),
     path('delete-banner/<int:pk>/', delete_banner, name='delete_banner'),
     
+    # blog  Urls
+    path('add-blog/', add_blog, name='add_blog'),
+    path('update-blog/<int:pk>/', update_blog, name='update_blog'),
+    path('list-blogs/', list_blogs, name='list_blogs'),
+    path('delete-blog/<int:pk>/', delete_blog, name='delete_blog'),
+    
     # Cart  Urls
     path('list-user-cart/<int:pk>/', user_cart_list, name='list_user_cart'),
     path('delete-cart/<int:pk>/', delete_cart, name='delete_cart'),

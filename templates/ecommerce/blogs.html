@@ -8,7 +8,7 @@
             <!-- Card header -->
             <div class="card-header border-0">
                 <h3 class="mb-0">{{title}} </h3>
-                <a href="{% url "add_banner" %}" class="bg-success btn float-end">+Add</a>
+                <a href="{% url "add_blog" %}" class="bg-success btn float-end">+Add</a>
             </div>
             {% csrf_token %}
             <!-- Light table -->
@@ -18,38 +18,46 @@
                     <tr>
                         <th scope="col" class="sort" data-sort="name">SN</th>
                         <th scope="col" class="sort" data-sort="name">Image</th>
-                        <th scope="col" class="sort" data-sort="name">On Page</th>
                         <th scope="col" class="sort" data-sort="name">Title</th>
+                        <th scope="col" class="sort" data-sort="name">Published</th>
+                        <th scope="col" class="sort" data-sort="name">Last Update</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody class="list">
-                    {% for banner in banners %}
+                    {% for blog in blogs %}
                     <tr>
                         <td class="budget">
                             {{forloop.counter}}
                         </td>
                         <td>
-                            <img src="{{banner.image.url}}" class="image-sm">
+                            <img src="{{blog.image.url}}" class="image-sm">
                         </td>
                         <td>
-                            {{banner.page}}
+                            {{blog.title}}
                         </td>
                         <td>
-                            {{banner.title}}
+                            {% if blog.published %}
+                            Yes
+                            {% else %}
+                            No
+                            {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'update_banner' banner.id %}"><i class="fa fa-edit" title="Update" ></i></a>
-                            <i class="fa fa-trash-alt" type="button" data-bs-toggle="modal" href="#deletebannerModal{{banner.id}}" style="background:transparent;"></i>
+                            {{blog.updated_at}}
+                        </td>
+                        <td>
+                            <a href="{% url 'update_blog' blog.id %}"><i class="fa fa-edit" title="Update" ></i></a>
+                            <i class="fa fa-trash-alt" type="button" data-bs-toggle="modal" href="#deleteblogModal{{blog.id}}" style="background:transparent;"></i>
                         </td>
                     </tr>
                      <!-- Modal -->
                     
-                    <div class="modal fade" id="deletebannerModal{{banner.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                    <div class="modal fade" id="deleteblogModal{{blog.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel{{banner.id}}">Delete banner</h5>
+                                <h5 class="modal-title" id="deleteModalLabel{{blog.id}}">Delete blog</h5>
 
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -58,7 +66,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="{% url 'delete_banner' banner.id %}">Delete</a>
+                                <a class="btn btn-danger" href="{% url 'delete_blog' blog.id %}">Delete</a>
                             </div>
                           </div>
                         </div>

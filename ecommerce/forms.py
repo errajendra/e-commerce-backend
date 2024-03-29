@@ -3,7 +3,7 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import (
     Category, Product,
     ProductFAQ, ProductReview,
-    Banner,
+    Banner, Blog,
 )
 
 
@@ -96,5 +96,24 @@ class BannerForm(forms.ModelForm):
         fields = "__all__"
 
         widgets = {
+            'page': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+
+"""
+Blogs Form
+"""
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = "__all__"
+        
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'sub_title': forms.TextInput(attrs={'class': 'form-control'}),
+            "content": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="extends"
+            )
         }

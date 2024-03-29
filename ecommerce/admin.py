@@ -111,4 +111,13 @@ class TransactionAdmin(admin.ModelAdmin):
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('title', 'page')
+    list_filter = ('page',)
+
+
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ('title', 'published', 'created_at')
+    list_filter = ('published', 'created_at', 'updated_at')
+    search_fields = ('title', )
+    

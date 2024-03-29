@@ -4,6 +4,7 @@ from ..models import (
     Category, Product, ProductFAQ, ProductReview, Banner,
     Cart, Order, OrderProduct, Transaction,
     UserAddress,
+    Blog,
 )
 from user.api.serializers import UserInfoSerializer
 
@@ -25,6 +26,11 @@ class CategoryListSerializer(serializers.ModelSerializer):
         data["sold_items"] = OrderProduct.objects.filter(
             product__category=instance
             ).aggregate(Avg('quantity'))['quantity__avg'] or 0
+        products = instance.products.select_related().all().order_by('price')
+        if products.exists():
+            data["price_in_range"] = f"{round(products.first().price)} - {round(products.last().price)}"
+        else:
+            data["price_in_range"] = "Not Available"
         return data
 
 
@@ -254,4 +260,24 @@ class BannerSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Banner
-        fields = ("title", "image")
+        fields = ("title", "image", "page")
+
+
+
+class BlogListingSerializer(serializers.ModelSerializer):
+    """
+    Blog Listing Serializer
+    """
+    class Meta:
+        model = Blog
+        fields = ('id', 'title', 'content', 'image', 'updated_at')
+        
+
+
+class BlogDetailSerializer(serializers.ModelSerializer):
+    """
+    Blog LisDetailting Serializer
+    """
+    class Meta:
+        model = Blog
+        fields = ('id', 'title', 'content', 'image', 'updated_at')

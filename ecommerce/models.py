@@ -5,6 +5,13 @@ from user.models import BaseModel, CustomUser as User, _
 
 
 class Banner(models.Model):
+    PAGE_CHOICES = (
+        ("HOME", "HOME"),
+        ("PRODUCT LISTING", "PRODUCT LISTING"),
+    )
+    page = models.CharField(
+        _("Show on Page"), max_length=20,
+        choices=PAGE_CHOICES, default="HOME PAGE")
     image = models.ImageField()
     title = models.CharField(max_length=50)
 
@@ -17,6 +24,7 @@ class UserAddress(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
     name = models.CharField('House Number', max_length=50, null=True, blank=True)
     mobile_number = models.CharField('Mobile Number', max_length=15, null=True, blank=True)
+    alt_mobile_number = models.CharField('Alternet Mobile Number', max_length=15, null=True, blank=True)
     email = models.EmailField('Delivery Email', null=True, blank=True)
     house_number = models.CharField('House Number', max_length=20, null=True, blank=True)
     street = models.CharField('Street Address', max_length=250)
@@ -281,3 +289,10 @@ class Transaction(BaseModel):
         Returns the user, order, and status for the transaction.
         """
         return f'{self.user} - {self.order} - {self.status}'
+
+
+class Blog(BaseModel):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='blog/', default="product-default.jpg")
+    content = CKEditor5Field(config_name='extends', null=True, blank=True)
+    published = models.BooleanField(_('Is Published'), default=False)

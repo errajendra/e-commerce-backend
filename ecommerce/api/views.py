@@ -18,14 +18,21 @@ class CategoryView(ModelViewSet):
     pagination_class = None
     
 
+
 """
     Banner Listing Viewsets
 """
 class BannerView(ModelViewSet):
     http_method_names = ('get',)
     serializer_class = BannerSerializer
-    queryset = Banner.objects.all()
     pagination_class = None
+    
+    def get_queryset(self):
+        page = self.request.GET.get('page', None)
+        if page:
+            return Banner.objects.filter(page=page)
+        else:
+            return Banner.objects.all()
     
 
 
@@ -204,3 +211,17 @@ class UserAddressView(ModelViewSet):
     
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)
+
+
+
+
+""" BLogs View. """
+class BlogView(ModelViewSet):
+    serializer_class = BlogListingSerializer
+    
+    def get_queryset(self):
+        return Blog.objects.filter(published=True)
+    
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = BlogDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
