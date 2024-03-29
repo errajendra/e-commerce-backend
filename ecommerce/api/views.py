@@ -28,7 +28,7 @@ class BannerView(ModelViewSet):
     pagination_class = None
     
     def get_queryset(self):
-        page = self.request.GET.get('page', None)
+        page = self.request.GET.get('on_page', None)
         if page:
             return Banner.objects.filter(page=page)
         else:
