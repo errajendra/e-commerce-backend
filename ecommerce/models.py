@@ -86,7 +86,6 @@ class Product(BaseModel):
     discount_price = models.FloatField(
         _('Given Discount Price'), default=0
     )
-    is_featured = models.BooleanField(_('Is Featured?'), default=False)
     stock = models.PositiveIntegerField(_('Stock Count'), default=0)
     image1 = models.ImageField(_("Product Image 1"), upload_to='products/', default='product-default.jpg')
     image2 = models.ImageField(_("Product Image 2"), upload_to='products/', default='product-default.jpg')
@@ -100,9 +99,11 @@ class Product(BaseModel):
         'Availability', max_length=14, choices=STATUS_CHOICES, default="IN STOCK"
     )
     status = models.BooleanField(
-        _('Active Status'), default=True,
+        _('Published Status'), default=True,
         help_text=_('If it is not active, the product will be hidden from the site.')
     )
+    is_featured = models.BooleanField(_('Is Featured?'), default=False)
+    is_new_arrival = models.BooleanField(_('Is New Arrival?'), default=False)
 
     class Meta:
         """
@@ -296,3 +297,28 @@ class Blog(BaseModel):
     image = models.ImageField(upload_to='blog/', default="product-default.jpg")
     content = CKEditor5Field(config_name='extends', null=True, blank=True)
     published = models.BooleanField(_('Is Published'), default=False)
+
+
+
+class Review(BaseModel):
+    """
+    A model representing a review.
+    """
+    RATING_CHOICES = (
+        (1, '1 - Poor'),
+        (2, '2 - Fair'),
+        (3, '3 - Good'),
+        (4, '4 - Very Good'),
+        (5, '5 - Excellent'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(_('Rating'), choices=RATING_CHOICES)
+    review = models.TextField('Review', null=True, blank=True)
+    status = models.BooleanField('Status', default=True)
+
+    def __str__(self):
+        """
+        Returns the user and rating for the review.
+        """
+        return f'{self.user} - {self.rating}'
+

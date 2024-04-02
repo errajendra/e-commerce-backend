@@ -120,4 +120,12 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'published', 'created_at')
     list_filter = ('published', 'created_at', 'updated_at')
     search_fields = ('title', )
-    
+
+
+@admin.register(Review)
+class AdminReview(admin.ModelAdmin):
+    list_display = ('user', 'rating', 'review', 'status')
+    list_filter = ('status', 'rating',)
+    list_editable = ('status', 'rating',)
+    search_fields = ('review',
+        'user__name', 'user__email', 'user__mobile_number')

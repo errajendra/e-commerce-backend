@@ -4,7 +4,7 @@ from ..models import (
     Category, Product, ProductFAQ, ProductReview, Banner,
     Cart, Order, OrderProduct, Transaction,
     UserAddress,
-    Blog,
+    Blog, Review,
 )
 from user.api.serializers import UserInfoSerializer
 
@@ -53,7 +53,7 @@ class ProductFAQsListSerializer(serializers.ModelSerializer):
 """
 class ProductReviewSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.filter(status=True))
 
     class Meta:
         model = ProductReview
@@ -83,7 +83,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id', 'category', 'name', 'sub_name',
-            'price', 'is_featured', 'image1'
+            'price', 'is_featured', 'is_new_arrival', 'image1'
         )
         
     def to_representation(self, instance):
@@ -286,3 +286,19 @@ class BlogDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = ('id', 'title', 'content', 'image', 'updated_at')
+
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Review Serializer
+    """
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Review
+        fields = ('user', 'rating', 'review', 'updated_at')
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = UserInfoSerializer(instance.user).data
+        return data

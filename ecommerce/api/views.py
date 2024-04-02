@@ -59,6 +59,9 @@ class ProductView(ModelViewSet):
                 Q(category__name__icontains = self.request.query_params.get('search'))
             )
         
+        if self.request.query_params.get('is_new_arrival'):
+            qs = qs.filter(is_new_arrival=True)
+        
         # Sorting by Price
         sort_by = self.request.query_params.get('sort')
         if sort_by:
@@ -225,3 +228,26 @@ class BlogView(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = BlogDetailSerializer
         return super().retrieve(request, *args, **kwargs)
+
+
+
+""" Reviews Views"""
+class ReviewView(ModelViewSet):
+    serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        return Review.objects.filter(status=True)
+    
+    def create(self, request, *args, **kwargs):
+        self.permission_classes = (IsAuthenticated, )
+        return super().create(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        self.permission_classes = (IsAuthenticated,)
+        self.queryset = Review.objects.filter(user=request.user)
+        return super().destroy(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        self.permission_classes = (IsAuthenticated,)
+        self.queryset = Review.objects.filter(user=request.user)
+        return super().update(request, *args, **kwargs)
