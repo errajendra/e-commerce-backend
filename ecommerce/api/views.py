@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Q
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
@@ -233,21 +233,20 @@ class BlogView(ModelViewSet):
 
 """ Reviews Views"""
 class ReviewView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = ReviewSerializer
     
     def get_queryset(self):
         return Review.objects.filter(status=True)
     
-    def create(self, request, *args, **kwargs):
-        self.permission_classes = (IsAuthenticated, )
-        return super().create(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        self.permission_classes = [AllowAny]
+        return super().list(request, *args, **kwargs)
     
     def destroy(self, request, *args, **kwargs):
-        self.permission_classes = (IsAuthenticated,)
         self.queryset = Review.objects.filter(user=request.user)
         return super().destroy(request, *args, **kwargs)
     
     def update(self, request, *args, **kwargs):
-        self.permission_classes = (IsAuthenticated,)
         self.queryset = Review.objects.filter(user=request.user)
         return super().update(request, *args, **kwargs)
