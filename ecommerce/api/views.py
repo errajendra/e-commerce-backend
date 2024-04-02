@@ -231,18 +231,25 @@ class BlogView(ModelViewSet):
 
 
 
+""" Reviews List Views"""
+class ReviewListView(ModelViewSet):
+    http_method_names = ("get",)
+    serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        return Review.objects.filter(status=True)
+
+
+
 """ Reviews Views"""
 class ReviewView(ModelViewSet):
+    http_method_names = ("post", "put", "delete")
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewSerializer
     
     def get_queryset(self):
         return Review.objects.filter(status=True)
-    
-    def list(self, request, *args, **kwargs):
-        self.permission_classes = AllowAny
-        return super().list(request, *args, **kwargs)
-    
+        
     def destroy(self, request, *args, **kwargs):
         self.queryset = Review.objects.filter(user=request.user)
         return super().destroy(request, *args, **kwargs)

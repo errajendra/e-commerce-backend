@@ -6,7 +6,7 @@ from .views import (
     OrderCartProduct, OrderListView, TransactionListView,
     UserAddressView,
     BlogView,
-    ReviewView,
+    ReviewView, ReviewListView,
 )
 
 router = DefaultRouter()
@@ -21,7 +21,8 @@ router.register('order-cart-product', OrderCartProduct, basename='order-from-car
 router.register('address', UserAddressView, basename='address')
 router.register('orders', OrderListView, basename='orders')
 router.register('transactions', TransactionListView, basename='transactions')
-router.register('reviews', ReviewView, basename='reviews')
+router.register('review', ReviewView, basename='review')
+router.register('reviews', ReviewListView, basename='reviews')
 
 urlpatterns = [
     # router.urls is a list of URL patterns that are automatically created by
