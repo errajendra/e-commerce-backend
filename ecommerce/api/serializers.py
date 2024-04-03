@@ -296,7 +296,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Review
-        fields = ('user', 'rating', 'review', 'updated_at')
+        fields = ('id', 'user', 'rating', 'review', 'updated_at')
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
