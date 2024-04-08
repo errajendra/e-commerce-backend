@@ -4,6 +4,7 @@ from .views import (
     CategoryView, ProductView, CartView, BannerView,
     ProductReviewView,
     OrderCartProduct, OrderListView, TransactionListView,
+    OrderCancelView, ReOrderlView,
     UserAddressView,
     BlogView,
     ReviewView, ReviewListView,
@@ -20,6 +21,8 @@ router.register('product-review', ProductReviewView, basename='product-review')
 router.register('order-cart-product', OrderCartProduct, basename='order-from-cart')
 router.register('address', UserAddressView, basename='address')
 router.register('orders', OrderListView, basename='orders')
+router.register('cancel-order', OrderCancelView, basename='cancel-order')
+router.register('re-order', ReOrderlView, basename='re-order')
 router.register('transactions', TransactionListView, basename='transactions')
 router.register('review', ReviewView, basename='review')
 router.register('reviews', ReviewListView, basename='reviews')

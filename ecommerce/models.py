@@ -212,12 +212,17 @@ class Order(BaseModel):
         ("IN-PROGRESS", "IN-PROGRESS"),
         ("DELIVERED", "DELIVERED"),
         ("FAILED", "FAILED"),
+        ("CENCELED", "CENCELED"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     total_price = models.FloatField(default=0)
     status = models.CharField(max_length=12, choices=ORDER_STATUS_CHOICES, default="PENDING")
     delivery_address = models.CharField(_("Delivery Address"), max_length=250, null=True, blank=True)
     delivery_zip_code = models.CharField(_("Delivery ZIP Code"), max_length=10, null=True, blank=True)
+    cancelation_reason = models.CharField(
+        _("Order Cancelation Reason"), max_length=100,
+        help_text = _("If User Cencel the order they can specify the cancelation reason"),
+        null=True, blank=True)
 
     def __str__(self):
         """

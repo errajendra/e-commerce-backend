@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.db.models import Q, Sum
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -191,6 +192,76 @@ class OrderListView(ModelViewSet):
     
     def get_queryset(self):
         return self.request.user.orders.all()
+
+
+
+"""
+Order Cancel Viewset
+"""
+class OrderCancelView(ModelViewSet):
+    http_method_names = ('put',)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderSerializer
+    
+    def get_queryset(self):
+        return self.request.user.orders.all().exclude(
+            status__in = ["DELIVERED", "FAILED", "CENCELED"]
+        )
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        cancelation_reason = request.data.get("cancelation_reason", None)
+        instance.status = "CANCELED"
+        instance.cancelation_reason = cancelation_reason
+        instance.save()
+        return Response(
+            self.serializer_class(instance).data
+        )
+
+
+
+"""
+Re Order Viewset
+"""
+class ReOrderlView(ModelViewSet):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderSerializer
+    
+    def create(self, request, *args, **kwargs):
+        order_id = request.POST.get("order_id", None)
+        old_instance = get_object_or_404(Order, id=order_id)
+        old_order_products = old_instance.order_products.all()
+        products = Product.objects.filter(
+            id__in = old_order_products.values_list('product', flat=True)
+        )
+        
+        # Create a new Order Instance and set the user to be the same as the original one
+        
+        total_price = products.aggregate(total=Sum('price'))['total'] or 0
+        instance = Order(
+            user = old_instance.user,
+            total_price = total_price,
+            delivery_address = old_instance.delivery_address,
+            delivery_zip_code = old_instance.delivery_zip_code,
+        )
+        instance.save()
+        
+        # create order product detail
+        order_product_qs = []
+        for op in old_order_products:
+            order_product_qs.append(
+                OrderProduct(
+                    order = instance,
+                    product = op.product,
+                    quantity = op.quantity,
+                    price = op.product.price
+                )
+            )
+        OrderProduct.objects.bulk_create(order_product_qs, ignore_conflicts=True)
+        return Response(
+            self.serializer_class(instance).data
+        )
 
 
 

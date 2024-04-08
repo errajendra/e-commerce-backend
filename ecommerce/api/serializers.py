@@ -229,6 +229,8 @@ class OrderSerializer(serializers.ModelSerializer):
             instance.order_products.all(),
             many = True
         ).data
+        if instance.status == "CANCELED":
+            data["cancelation_reason"] = instance.cancelation_reason
         return data
         
 
