@@ -9,9 +9,16 @@ class Banner(models.Model):
         ("HOME", "HOME"),
         ("PRODUCT LISTING", "PRODUCT LISTING"),
     )
+    USE_FOR_CHOICES = (
+        ("MOBILE", "MOBILE"),
+        ("DESKTOP", "DESKTOP"),
+    )
     page = models.CharField(
         _("Show on Page"), max_length=20,
         choices=PAGE_CHOICES, default="HOME PAGE")
+    use_for = models.CharField(
+        _("Use For"), max_length=20,
+        choices=USE_FOR_CHOICES, default="MOBILE")
     image = models.ImageField()
     title = models.CharField(max_length=50)
 

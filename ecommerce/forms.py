@@ -97,6 +97,7 @@ class BannerForm(forms.ModelForm):
 
         widgets = {
             'page': forms.Select(attrs={'class': 'form-control'}),
+            'use_for': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
