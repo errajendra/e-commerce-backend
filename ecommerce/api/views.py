@@ -29,14 +29,16 @@ class BannerView(ModelViewSet):
     pagination_class = None
     
     def get_queryset(self):
+        qs = Banner.objects.all()
         page = self.request.GET.get('on_page', None)
         if page:
-            return Banner.objects.filter(page=page)
+            qs = qs.filter(page=page)
+        
         use_for = self.request.GET.get('use_for', None)
         if use_for:
-            return Banner.objects.filter(use_for=use_for)
-        else:
-            return Banner.objects.all()
+            qs = qs.filter(use_for=use_for)
+        
+        return qs
     
 
 

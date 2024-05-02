@@ -267,7 +267,7 @@ class BannerSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Banner
-        fields = ("title", "image", "page")
+        fields = ("title", "use_for", "image", "page")
 
 
 
