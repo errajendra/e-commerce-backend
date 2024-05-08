@@ -230,6 +230,10 @@ class Order(BaseModel):
         _("Order Cancelation Reason"), max_length=100,
         help_text = _("If User Cencel the order they can specify the cancelation reason"),
         null=True, blank=True)
+    payment_screentshot = models.ImageField(
+        verbose_name="Payment Sceenshot", null=True, blank=True,
+        upload_to="order/payments-screenshots/",
+        help_text="Custumer will upload screenshot of payment after order the product.")
 
     def __str__(self):
         """

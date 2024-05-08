@@ -169,6 +169,7 @@ class OrderCartProduct(ModelViewSet):
                     price = cart.quantity * cart.product.price
                 )
             )
+        
         try:
             OrderProduct.objects.bulk_create(order_products_qs)
         except Exception as e:
@@ -177,11 +178,15 @@ class OrderCartProduct(ModelViewSet):
                     "message": f"{str(e)}"
                 },
                 status=status.HTTP_400_BAD_REQUEST)
+        
         cart_items.delete()
+        
         return Response(
             status=status.HTTP_201_CREATED,
             data = {
-                "order": OrderSerializer(order).data
+                "order": OrderSerializer(order).data,
+                "qr_pay": "#"
+                
             }
         )
 
@@ -194,6 +199,19 @@ class OrderListView(ModelViewSet):
     http_method_names = ('get',)
     permission_classes = (IsAuthenticated,)
     serializer_class = OrderSerializer
+    
+    def get_queryset(self):
+        return self.request.user.orders.all()
+
+
+
+"""
+Order Payment Screenshot upload Viewset
+"""
+class OrderPaymentScreenShotUploadView(ModelViewSet):
+    http_method_names = ('put',)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderPaymentScreenShotUploadSerializer
     
     def get_queryset(self):
         return self.request.user.orders.all()

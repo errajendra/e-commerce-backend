@@ -232,6 +232,17 @@ class OrderSerializer(serializers.ModelSerializer):
         if instance.status == "CANCELED":
             data["cancelation_reason"] = instance.cancelation_reason
         return data
+
+
+
+
+class OrderPaymentScreenShotUploadSerializer(serializers.ModelSerializer):
+    payment_screentshot = serializers.ImageField()
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'payment_screentshot',
+        ]
         
 
 

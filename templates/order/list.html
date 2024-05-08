@@ -22,6 +22,7 @@
                             <th scope="col" class="sort">User</th>
                             <th scope="col" class="sort">Amount</th>
                             <th scope="col" class="sort">Status</th>
+                            <th scope="col" class="sort">Payment Image</th>
                             <th scope="col" class="sort">Date</th>
                             <th scope="col" class="sort">Address</th>
                             <th scope="col" class="sort">ZIP Code</th>
@@ -51,11 +52,18 @@
                             <td>
                                 <select class="border-0 orderStatus" data-order-id="{{ order.id }}">
                                     <option value="PENDING" {% if order.status == "PENDING" %}selected{% endif %}>PENDING</option>
-                                    <option value="ORDERED" {% if order.status == "ORDERED" %}selected{% endif %}>ORDERED</option>
+                                    <option value="ORDERED" {% if order.status == "ORDERED" %}selected{% endif %}>ORDERED (Success)</option>
                                     <option value="IN-PROGRESS" {% if order.status == "IN-PROGRESS" %}selected{% endif %}>IN-PROGRESS</option>
                                     <option value="DELIVERED" {% if order.status == "DELIVERED" %}selected{% endif %}>DELIVERED</option>
                                     <option value="FAILED" {% if order.status == "FAILED" %}selected{% endif %}>FAILED</option>
                                 </select>
+                            </td>
+                            <td>
+                                {% if order.payment_screentshot %}
+                                <a href="{{order.payment_screentshot.url}}" target="_blank">
+                                    <img src="{{order.payment_screentshot.url}}" class="image-sm" />
+                                </a>
+                                {% endif %}
                             </td>
                             <td>
                                 {{order.created_at}}
