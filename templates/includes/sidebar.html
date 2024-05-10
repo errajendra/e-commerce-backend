@@ -15,7 +15,7 @@
       <img src="/static/assets/img/logo.jpg" class="image-md">
     </div>
     
-    <ul class="nav flex-column pt-3 pt-md-0">
+    <ul class="nav flex-column pt-3 pt-md-0 mt-5">
 
       {% if request.user.is_staff %}
       <li class="nav-item {% if request.resolver_match.view_name == 'index' %} active {% endif %}">
@@ -52,7 +52,7 @@
       <li class="nav-item {% if request.resolver_match.view_name == 'transactions' %} active {% endif %}">
         <a href="{% url 'transactions' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-exchange"></i>
           </span>
           <span class="sidebar-text">Transactions</span>
         </a>
@@ -85,10 +85,15 @@
         </a>
       </li>
 
+      <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
+      <li class="nav-item mb-4">
+        <div class="text-italic nav-title text-muted">Features</div>
+      </li>
+
       <li class="nav-item {% if request.resolver_match.view_name == 'list_banners' %} active {% endif %}">
         <a href="{% url 'list_banners' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-images"></i>
           </span>
           <span class="sidebar-text">Banners</span>
         </a>
@@ -98,7 +103,7 @@
       <li class="nav-item {% if request.resolver_match.view_name == 'list_blogs' %} active {% endif %}">
         <a href="{% url 'list_blogs' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-blog"></i>
           </span>
           <span class="sidebar-text">Blogs</span>
         </a>
@@ -107,7 +112,7 @@
       <li class="nav-item {% if request.resolver_match.view_name == 'list_reviews' %} active {% endif %}">
         <a href="{% url 'list_reviews' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-star"></i>
           </span>
           <span class="sidebar-text">Reviews</span>
         </a>
