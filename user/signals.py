@@ -34,4 +34,3 @@ def user_creation(sender, instance, created, **kwargs):
             to = [instance.email]
         )
         email.send(fail_silently=False)
-        

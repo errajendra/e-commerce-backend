@@ -42,7 +42,7 @@ def update_category(request, pk):
 
 def list_categories(request):
     categories = Category.objects.all()
-    return render(request, 'ecommerce\category-list.html', {'categories': categories})
+    return render(request, 'ecommerce/category-list.html', {'categories': categories})
 
 
 def delete_category(request, pk):
@@ -83,7 +83,7 @@ def update_product(request, pk):
 
 def list_products(request):
     products = Product.objects.all()
-    return render(request, 'ecommerce\products-list.html', {'products': products})
+    return render(request, 'ecommerce/products-list.html', {'products': products})
 
 
 def delete_product(request, pk):
