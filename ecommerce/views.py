@@ -3,10 +3,11 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .forms import (
     CategoryForm, ProductForm, ProductFAQsForm, ProductReviewForm,
-    BannerForm, BlogForm, ReviewForm,
+    BannerForm, BlogForm, ReviewForm, CategoryTitleForm, SubCategoryForm,
 )
 from .models import (
-    Category, Product, ProductFAQ, ProductReview, Cart,
+    Category, CategoryTitle, SubCategory,
+    Product, ProductFAQ, ProductReview, Cart,
     Order, Transaction,
     Banner,
     Blog, Review,
@@ -14,9 +15,12 @@ from .models import (
 from user.models import CustomUser as User
 
 
+"""
+Category View
+"""
 def add_category(request):
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, request.FILES or None)
         if form.is_valid():
             form.save()
             messages.success(request, 'Category added successfully')
@@ -29,7 +33,7 @@ def add_category(request):
 def update_category(request, pk):
     category = Category.objects.get(id=pk)
     if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
+        form = CategoryForm(request.POST, request.FILES or None, instance=category)
         if form.is_valid():
             form.save()
             messages.success(request, 'Category updated successfully')
@@ -50,6 +54,90 @@ def delete_category(request, pk):
     category.delete()
     messages.success(request, 'Category deleted successfully')
     return redirect('list_categories')
+
+
+"""
+Category Title View
+"""
+def add_category_title(request):
+    if request.method == 'POST':
+        form = CategoryTitleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category title added successfully')
+            return redirect('list_category_title')
+    else:
+        form = CategoryTitleForm()
+    return render(request, 'forms/form.html', {'form': form})
+
+
+def update_category_title(request, pk):
+    category_title = CategoryTitle.objects.get(id=pk)
+    if request.method == 'POST':
+        form = CategoryTitleForm(request.POST, instance=category_title)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category_title updated successfully')
+            return redirect('list_category_title_title')
+    else:
+        form = CategoryTitleForm(instance=category_title)
+    return render(request, 'forms/form.html',
+     {'form': form, 'title': "Update"})
+
+
+def list_category_title(request):
+    categories = CategoryTitle.objects.all()
+    return render(request, 'ecommerce/category-title-list.html', {'categories': categories, 'title': "Category Title"})
+
+
+def delete_category_title(request, pk):
+    category_title = get_object_or_404(CategoryTitle, id=pk)
+    category_title.delete()
+    messages.success(request, 'Category title deleted successfully')
+    return redirect('list_category_title')
+
+
+
+"""
+Sub Category View
+"""
+def add_sub_category(request):
+    if request.method == 'POST':
+        form = SubCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Sub Category added successfully')
+            return redirect('list_sub_categories')
+    else:
+        form = SubCategoryForm()
+    return render(request, 'forms/form.html', {'form': form})
+
+
+def update_sub_category(request, pk):
+    sub_category = SubCategory.objects.get(id=pk)
+    if request.method == 'POST':
+        form = SubCategoryForm(request.POST, request.FILES or None, instance=sub_category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Sub Category updated successfully')
+            return redirect('list_sub_categories')
+    else:
+        form = SubCategoryForm(instance=sub_category)
+    return render(request, 'forms/form.html',
+     {'form': form, 'title': "Update"})
+
+
+def list_sub_categories(request):
+    categories = SubCategory.objects.all()
+    return render(request, 'ecommerce/subcategory-list.html', {'categories': categories, 'title':"Sub Categories"})
+
+
+def delete_sub_category(request, pk):
+    sub_category = get_object_or_404(SubCategory, id=pk)
+    sub_category.delete()
+    messages.success(request, 'Sub Category deleted successfully')
+    return redirect('list_sub_categories')
+
 
 
 """

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
   <a class="navbar-brand me-lg-5" href="/">
-      <img class="navbar-brand-dark" src="/static/assets/img/logo.png" alt="Food Delivery logo" /> <img class="navbar-brand-light" src="/static/assets/img/logo.png" alt="Food Delivery logo" />
+      <img class="navbar-brand-dark" src="/static/assets/img/logo.jpg" alt="Food Delivery logo" /> <img class="navbar-brand-light" src="/static/assets/img/logo.png" alt="Food Delivery logo" />
   </a>
   <div class="d-flex align-items-center">
       <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +15,7 @@
       <img src="/static/assets/img/logo.jpg" class="image-md">
     </div>
     
-    <ul class="nav flex-column pt-3 pt-md-0 mt-5">
+    <ul class="nav flex-column pt-3 pt-md-0 mt-3">
 
       {% if request.user.is_staff %}
       <li class="nav-item {% if request.resolver_match.view_name == 'index' %} active {% endif %}">
@@ -35,10 +35,10 @@
         </a>
       </li>
       
-      <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
+      {% comment %} <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
       <li class="nav-item mb-4">
         <div class="text-italic nav-title text-muted">E-Commerce</div>
-      </li>
+      </li> {% endcomment %}
 
       <li class="nav-item {% if request.resolver_match.view_name == 'orders' %} active {% endif %}">
         <a href="{% url 'orders' %}" class="nav-link">
@@ -52,7 +52,7 @@
       <li class="nav-item {% if request.resolver_match.view_name == 'transactions' %} active {% endif %}">
         <a href="{% url 'transactions' %}" class="nav-link">
           <span class="sidebar-icon">
-            <i class="fas fa-exchange"></i>
+            <i class="fas fa-list"></i>
           </span>
           <span class="sidebar-text">Transactions</span>
         </a>
@@ -67,6 +67,24 @@
         </a>
       </li>
 
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_category_title' %} active {% endif %}">
+        <a href="{% url 'list_category_title' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-network-wired"></i>
+          </span>
+          <span class="sidebar-text">Category Title</span>
+        </a>
+      </li>
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'list_sub_categories' %} active {% endif %}">
+        <a href="{% url 'list_sub_categories' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-network-wired"></i>
+          </span>
+          <span class="sidebar-text">Sub Category</span>
+        </a>
+      </li>
+
       <li class="nav-item {% if request.resolver_match.view_name == 'list_products' %} active {% endif %}">
         <a href="{% url 'list_products' %}" class="nav-link">
           <span class="sidebar-icon">
@@ -76,19 +94,19 @@
         </a>
       </li>
 
-      <li class="nav-item {% if request.resolver_match.view_name == 'list_productfaqs' %} active {% endif %}">
+      {% comment %} <li class="nav-item {% if request.resolver_match.view_name == 'list_productfaqs' %} active {% endif %}">
         <a href="{% url 'list_productfaqs' %}" class="nav-link">
           <span class="sidebar-icon">
             <i class="fas fa-question"></i>
           </span>
           <span class="sidebar-text">Product FAQs</span>
         </a>
-      </li>
+      </li> {% endcomment %}
 
-      <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
+      {% comment %} <li class="nav-item"><!-- Separator with title --><hr class="navbar-divider"></li>
       <li class="nav-item mb-4">
         <div class="text-italic nav-title text-muted">Features</div>
-      </li>
+      </li> {% endcomment %}
 
       <li class="nav-item {% if request.resolver_match.view_name == 'list_banners' %} active {% endif %}">
         <a href="{% url 'list_banners' %}" class="nav-link">

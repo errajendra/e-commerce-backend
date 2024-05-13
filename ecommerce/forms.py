@@ -4,6 +4,7 @@ from .models import (
     Category, Product,
     ProductFAQ, ProductReview,
     Banner, Blog, Review,
+    CategoryTitle, SubCategory,
 )
 
 
@@ -22,6 +23,36 @@ class CategoryForm(forms.ModelForm):
 
 
 
+"""
+Category Title Forms
+"""
+class CategoryTitleForm(forms.ModelForm):
+    class Meta:
+        model = CategoryTitle
+        fields = ("category", "name")
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+
+
+"""
+Sub Category Forms
+"""
+class SubCategoryForm(forms.ModelForm):
+    class Meta:
+        model = SubCategory
+        fields = "__all__"
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'category_title': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+
+
 """ 
 Product Form
 - Includes a form field for the category that this product belongs to.
@@ -33,23 +64,37 @@ class ProductForm(forms.ModelForm):
         # exclude = ('benefits', 'how_to_use')
         
         widgets = {
-            'category': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'sub_category': forms.Select(attrs={'class': 'form-control'}),
             'sub_name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'availability': forms.Select(attrs={'class': 'form-control'}),
-            "benefits": CKEditor5Widget(
-                attrs={"class": "django_ckeditor_5"}, config_name="default"
-            ),
-            "cons": CKEditor5Widget(
-                attrs={"class": "django_ckeditor_5"}, config_name="default"
-            ),
-            "how_to_use": CKEditor5Widget(
-                attrs={"class": "django_ckeditor_5"}, config_name="default"
-            )
+            'unit': forms.Select(attrs={'class': 'form-control'}),
+            'sku': forms.TextInput(attrs={'class': 'form-control'}),
+            'treatment': forms.TextInput(attrs={'class': 'form-control'}),
+            'transparency': forms.TextInput(attrs={'class': 'form-control'}),
+            'shape': forms.TextInput(attrs={'class': 'form-control'}),
+            'origin': forms.TextInput(attrs={'class': 'form-control'}),
+            'color': forms.TextInput(attrs={'class': 'form-control'}),
+            'specific_gravity': forms.TextInput(attrs={'class': 'form-control'}),
+            'refractive_index': forms.TextInput(attrs={'class': 'form-control'}),
+            'exact_dimension': forms.TextInput(attrs={'class': 'form-control'}),
+            'weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'certification': forms.TextInput(attrs={'class': 'form-control'}),
+            
+            # "benefits": CKEditor5Widget(
+            #     attrs={"class": "django_ckeditor_5"}, config_name="default"
+            # ),
+            # "cons": CKEditor5Widget(
+            #     attrs={"class": "django_ckeditor_5"}, config_name="default"
+            # ),
+            # "how_to_use": CKEditor5Widget(
+            #     attrs={"class": "django_ckeditor_5"}, config_name="default"
+            # )
         }
         
 

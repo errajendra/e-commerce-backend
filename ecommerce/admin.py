@@ -18,22 +18,37 @@ class UserAddressAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'created_at')
+    list_display = ('name', 'created_at')
     list_filter = ('created_at', 'updated_at')
-    search_fields = ('name', 'description')
+    search_fields = ('name', )
+
+
+@admin.register(CategoryTitle)
+class CategoryTitleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'created_at')
+    list_filter = ('category', 'created_at', 'updated_at')
+    search_fields = ('name', 'category__name')
+
+
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category_title', 'created_at')
+    list_filter = ('created_at', 'updated_at')
+    search_fields = ('name', 'category_title__category__name')
 
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
+        'name', 
         'category', 
-        'name',  
+        'sub_category', 
         'sub_name',
         'description',
         'price', 
         'discount_price', 
-        'stock',  
+        'stock', 
         'is_featured',
         'availability', 
         'status', 

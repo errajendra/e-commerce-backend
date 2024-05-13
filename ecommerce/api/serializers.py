@@ -5,6 +5,7 @@ from ..models import (
     Cart, Order, OrderProduct, Transaction,
     UserAddress,
     Blog, Review,
+    CategoryTitle, SubCategory,
 )
 from user.api.serializers import UserInfoSerializer
 
@@ -16,7 +17,7 @@ from user.api.serializers import UserInfoSerializer
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'description', 'image')
+        fields = ('id', 'name', 'image')
         
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -32,6 +33,34 @@ class CategoryListSerializer(serializers.ModelSerializer):
         else:
             data["price_in_range"] = "Not Available"
         return data
+
+
+
+class SubCategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = ('name', )
+
+
+
+class CategoryTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryTitle
+        fields = ('name', )
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["sub_categories"] = SubCategoryListSerializer(instance.subcategories.all(), many=True).data
+        return data
+
+
+
+class CategoryDetailSerializer(CategoryListSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["category_titles"] = CategoryTitleSerializer(instance.titles.all(), many=True).data
+        return data
+
 
 
 

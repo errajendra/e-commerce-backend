@@ -13,6 +13,18 @@ urlpatterns = [
     path('list-categories/', list_categories, name='list_categories'),
     path('delete-category/<int:pk>/', delete_category, name='delete_category'),
     
+    # Category Title Urls
+    path('add-category-title/', add_category_title, name='add_category_title'),
+    path('update-category-title/<int:pk>/', update_category_title, name='update_category_title'),
+    path('list-category-titles/', list_category_title, name='list_category_title'),
+    path('delete-category-title/<int:pk>/', delete_category_title, name='delete_category_title'),
+    
+    # Sub Category Urls
+    path('add-sub-category/', add_sub_category, name='add_sub_category'),
+    path('update-sub-category/<int:pk>/', update_sub_category, name='update_sub_category'),
+    path('list-sub-categories/', list_sub_categories, name='list_sub_categories'),
+    path('delete-sub-category/<int:pk>/', delete_sub_category, name='delete_sub_category'),
+    
     # Product Urls
     path('add-product/', add_product, name='add_product'),
     path('update-product/<int:pk>/', update_product, name='update_product'),

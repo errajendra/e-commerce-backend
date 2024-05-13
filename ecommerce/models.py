@@ -1,5 +1,6 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
+from django.core.validators import FileExtensionValidator
 from user.models import BaseModel, CustomUser as User, _
 
 
@@ -19,7 +20,7 @@ class Banner(models.Model):
     use_for = models.CharField(
         _("Use For"), max_length=20,
         choices=USE_FOR_CHOICES, default="MOBILE")
-    image = models.ImageField()
+    image = models.ImageField(help_text="Upload image on size 720*300")
     title = models.CharField(max_length=50)
 
 
@@ -62,7 +63,31 @@ class Category(BaseModel):
     A model representing a product category.
     """
     name = models.CharField("Name", max_length=100)
-    description = models.TextField('Description', blank=True, null=True)
+    image = models.ImageField(upload_to='category/', default="product-default.jpg")
+
+    def __str__(self):
+        return self.name
+
+
+
+class CategoryTitle(BaseModel):
+    """
+    A model representing a title of category.
+    """
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="titles")
+    name = models.CharField("Category Title Name", max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+
+class SubCategory(BaseModel):
+    """
+    A model representing a sub category.
+    """
+    category_title = models.ForeignKey(CategoryTitle, on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField("Sub Category Name", max_length=100)
     image = models.ImageField(upload_to='category/', default="product-default.jpg")
 
     def __str__(self):
@@ -79,19 +104,29 @@ class Product(BaseModel):
         ("NOT IN STOCK", "NOT IN STOCK"),
         ("UPCOMMING", "UPCOMMING"),
     )
+    
+    UNIT_CHOICES = (
+        ("CARATS", "CARATS"),
+        ("RATTI", "RATTI"),
+    )
+    
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, verbose_name='Category',
         related_name="products", null=True, blank=True
     )
+    sub_category = models.ForeignKey(
+        SubCategory, on_delete=models.SET_NULL, verbose_name='Sub Category',
+        related_name="products", null=True, blank=True
+    )
     name = models.CharField(_('Product Name'), max_length=100)
     sub_name = models.CharField(
-        _('Product Sub Name'), max_length=250,
-        help_text="Product's short description or tagline"
+        _('Product Sort Description'), max_length=250,
+        # help_text="Product's short description or tagline"
     )
     description = models.TextField(_("Description"), null=True, blank=True)
-    price = models.FloatField(_('Sell Price'))
+    price = models.FloatField(_('MRP'))
     discount_price = models.FloatField(
-        _('Given Discount Price'), default=0
+        _('Discount Price'), default=0
     )
     stock = models.PositiveIntegerField(_('Stock Count'), default=0)
     image1 = models.ImageField(_("Product Image 1"), upload_to='products/', default='product-default.jpg')
@@ -99,12 +134,31 @@ class Product(BaseModel):
     image3 = models.ImageField(_("Product Image 3"), upload_to='products/', default='product-default.jpg')
     image4 = models.ImageField(_("Product Image 4"), upload_to='products/', default='product-default.jpg')
     image5 = models.ImageField(_("Product Image 5"), upload_to='products/', default='product-default.jpg')
-    benefits = CKEditor5Field('Benefits', config_name='default', null=True, blank=True)
-    cons = CKEditor5Field('Cons', config_name='default', null=True, blank=True)
-    how_to_use = CKEditor5Field('How To Use', config_name='default', null=True, blank=True)
+    video = models.FileField(_("Product Video"), upload_to='product-video/', null=True, blank=True,
+                        validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])])
+    # benefits = CKEditor5Field("Product Specification's", config_name='default', null=True, blank=True)
+    # cons = CKEditor5Field('Cons', config_name='default', null=True, blank=True)
+    # how_to_use = CKEditor5Field('How To Use', config_name='default', null=True, blank=True)
     availability = models.CharField(
         'Availability', max_length=14, choices=STATUS_CHOICES, default="IN STOCK"
     )
+    
+    # Specification's
+    sku = models.CharField("SKU", unique=True, max_length=50, null=True, blank=True)
+    treatment = models.CharField("Treatment", max_length=50, null=True, blank=True)
+    transparency = models.CharField("Transparency", max_length=50, null=True, blank=True)
+    shape = models.CharField("Shape", max_length=50, null=True, blank=True)
+    origin = models.CharField("Origin", max_length=50, null=True, blank=True)
+    color = models.CharField("Color", max_length=50, null=True, blank=True)
+    specific_gravity = models.FloatField("Specific Gravity", max_length=50, null=True, blank=True)
+    refractive_index = models.CharField("Refractive Index", max_length=50, null=True, blank=True)
+    exact_dimension = models.CharField("Exact Dimensions", max_length=50, null=True, blank=True)
+    weight = models.FloatField("Weight (Ratti)", max_length=50, null=True, blank=True)
+    certification = models.CharField("Certification", max_length=50, null=True, blank=True)
+    unit = models.CharField(
+        'Unit', max_length=14, choices=UNIT_CHOICES, default="CARATS"
+    )
+    
     status = models.BooleanField(
         _('Published Status'), default=True,
         help_text=_('If it is not active, the product will be hidden from the site.')

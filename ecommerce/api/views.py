@@ -18,6 +18,10 @@ class CategoryView(ModelViewSet):
     queryset = Category.objects.select_related().all()
     pagination_class = None
     
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = CategoryDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
+    
 
 
 """
