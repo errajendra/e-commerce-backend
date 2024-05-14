@@ -85,7 +85,7 @@ class Category(BaseModel):
             ("10", "10"),
         ),
         max_length=12,
-        null=True, blank=True
+        unique=True
     )
     image = models.ImageField(upload_to='category/', default="product-default.jpg", help_text="Upload image on size 720*300")
 
