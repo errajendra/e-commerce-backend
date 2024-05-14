@@ -55,7 +55,11 @@ class CategoryTitleSerializer(serializers.ModelSerializer):
 
 
 
-class CategoryDetailSerializer(CategoryListSerializer):
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name',)
+    
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["category_titles"] = CategoryTitleSerializer(instance.titles.all(), many=True).data

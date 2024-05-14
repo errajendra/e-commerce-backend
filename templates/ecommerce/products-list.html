@@ -1,5 +1,12 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% block stylesheets %}
+
+<style>
+    .collapse.in { display: inline !important; }
+</style>
+
+{% endblock stylesheets %}
 {% block content %}
 
 <div class="row">
@@ -42,7 +49,7 @@
                             {{product.category.name}}
                         </td>
                         <td>
-                            {{product.description}}
+                            {{product.description }}    
                         </td>
                         <td>
                             {{product.price}} <span class="text-muted text-decoration-line-through"> {{product.list_price}} </span>
