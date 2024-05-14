@@ -25,6 +25,20 @@ class CategoryView(ModelViewSet):
 
 
 """
+    Sub Category Listing Viewsets 
+    used on the Natual Product Listing Banner
+"""
+class SubCategoryBannerView(ModelViewSet):
+    http_method_names = ('get',)
+    serializer_class = SubCategoryListSerializer
+    queryset = SubCategory.objects.all()
+    
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+
+
+"""
     Banner Listing Viewsets
 """
 class BannerView(ModelViewSet):
@@ -59,6 +73,10 @@ class ProductView(ModelViewSet):
         # Filter by Category
         if self.request.query_params.get('category'):
             qs = qs.filter(category__id=self.request.query_params.get('category'))
+            
+        # Filter by Sub Category
+        if self.request.query_params.get('sub_category'):
+            qs = qs.filter(sub_category__id=self.request.query_params.get('sub_category'))
             
         # Search by Name, Tag  or Description
         if self.request.query_params.get('search'):

@@ -1,8 +1,15 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 from user.models import BaseModel, CustomUser as User, _
 
+
+
+def file_size_10mb(value): # this is file size vaidator for 10 mb
+    limit = 10 * 1024 * 1024
+    if value.size > limit:
+        raise ValidationError('File too large. Size should not exceed 10 MiB.')
 
 
 class Banner(models.Model):
@@ -88,7 +95,7 @@ class SubCategory(BaseModel):
     """
     category_title = models.ForeignKey(CategoryTitle, on_delete=models.CASCADE, related_name='subcategories')
     name = models.CharField("Sub Category Name", max_length=100)
-    image = models.ImageField(upload_to='category/', default="product-default.jpg")
+    image = models.ImageField(upload_to='category/', default="product-default.jpg", help_text="Upload size 700*300 px")
 
     def __str__(self):
         return self.name
@@ -134,11 +141,18 @@ class Product(BaseModel):
     image3 = models.ImageField(_("Product Image 3"), upload_to='products/', default='product-default.jpg')
     image4 = models.ImageField(_("Product Image 4"), upload_to='products/', default='product-default.jpg')
     image5 = models.ImageField(_("Product Image 5"), upload_to='products/', default='product-default.jpg')
-    video = models.FileField(_("Product Video"), upload_to='product-video/', null=True, blank=True,
-                        validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])])
+    video = models.FileField(
+        _("Product Video"), upload_to='product-video/', null=True, blank=True,
+        max_length=500,
+        validators=[
+            FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv']),
+            file_size_10mb,],
+        help_text="Upload Video less then 10 MB.")
+    
     # benefits = CKEditor5Field("Product Specification's", config_name='default', null=True, blank=True)
     # cons = CKEditor5Field('Cons', config_name='default', null=True, blank=True)
     # how_to_use = CKEditor5Field('How To Use', config_name='default', null=True, blank=True)
+    
     availability = models.CharField(
         'Availability', max_length=14, choices=STATUS_CHOICES, default="IN STOCK"
     )
