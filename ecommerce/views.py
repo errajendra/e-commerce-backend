@@ -65,7 +65,7 @@ def add_category_title(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category title added successfully')
-            return redirect('list_category_title')
+            return redirect('list_categories')
     else:
         form = CategoryTitleForm()
     return render(request, 'forms/form.html', {'form': form})
@@ -78,7 +78,7 @@ def update_category_title(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category_title updated successfully')
-            return redirect('list_category_title_title')
+            return redirect('list_categories')
     else:
         form = CategoryTitleForm(instance=category_title)
     return render(request, 'forms/form.html',
@@ -94,7 +94,7 @@ def delete_category_title(request, pk):
     category_title = get_object_or_404(CategoryTitle, id=pk)
     category_title.delete()
     messages.success(request, 'Category title deleted successfully')
-    return redirect('list_category_title')
+    return redirect('list_categories')
 
 
 
@@ -103,11 +103,11 @@ Sub Category View
 """
 def add_sub_category(request):
     if request.method == 'POST':
-        form = SubCategoryForm(request.POST)
+        form = SubCategoryForm(request.POST, request.FILES or None)
         if form.is_valid():
             form.save()
             messages.success(request, 'Sub Category added successfully')
-            return redirect('list_sub_categories')
+            return redirect('list_categories')
     else:
         form = SubCategoryForm()
     return render(request, 'forms/form.html', {'form': form})
@@ -120,7 +120,7 @@ def update_sub_category(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Sub Category updated successfully')
-            return redirect('list_sub_categories')
+            return redirect('list_categories')
     else:
         form = SubCategoryForm(instance=sub_category)
     return render(request, 'forms/form.html',
@@ -136,7 +136,7 @@ def delete_sub_category(request, pk):
     sub_category = get_object_or_404(SubCategory, id=pk)
     sub_category.delete()
     messages.success(request, 'Sub Category deleted successfully')
-    return redirect('list_sub_categories')
+    return redirect('list_categories')
 
 
 
@@ -152,7 +152,13 @@ def add_product(request):
             return redirect('list_products')
     else:
         form = ProductForm()
-    return render(request, 'forms/form.html', {'form': form})
+    context = {
+        'form': form,
+        'title': 'Add a new product',
+        # 'categories': Category.objects.all(),
+        'sub_categories': SubCategory.objects.all()
+    }
+    return render(request, 'forms/product-form.html', context)
 
 
 def update_product(request, pk):
@@ -163,10 +169,17 @@ def update_product(request, pk):
             form.save()
             messages.success(request, 'Product updated successfully')
             return redirect('list_products')
+        else:
+            print(form.errors)
     else:
-        form = ProductForm(instance=product)
-    return render(request, 'forms/form.html',
-     {'form': form, 'title': "Update"})
+        form = ProductForm()
+    context = {
+        'title': 'Update product',
+        'instance': product,
+        'errors': form.errors,
+        'sub_categories': SubCategory.objects.all()
+    }
+    return render(request, 'forms/product-form.html', context)
 
 
 def list_products(request):

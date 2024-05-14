@@ -8,7 +8,9 @@
             <!-- Card header -->
             <div class="card-header border-0">
                 <h3 class="mb-0">{{title}} </h3>
-                <a href="{% url "add_category" %}" class="bg-success btn float-end">+Add</a>
+                <a href="{% url "add_sub_category" %}" class="bg-success btn float-end mx-2">+Add Sub Category</a>
+                <a href="{% url "add_category_title" %}" class="bg-success btn float-end mx-2">+Add Category Title</a>
+                <a href="{% url "add_category" %}" class="bg-success btn float-end mx-2">+Add Category</a>
             </div>
             {% csrf_token %}
             <!-- Light table -->
@@ -18,11 +20,13 @@
                     <tr>
                         <th scope="col" class="sort" data-sort="name">SN</th>
                         <th scope="col" class="sort" data-sort="name">Name</th>
+                        <th scope="col" class="sort" data-sort="name">Level on Menu</th>
                         <th scope="col" class="sort" data-sort="budget">Number of Products</th>
+                        <th scope="col" class="sort" data-sort="name">Detail</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody class="list">
+                <tbody class="">
                     {% for category in categories %}
                     <tr>
                         <td class="budget">
@@ -32,7 +36,87 @@
                             {{category.name}}
                         </td>
                         <td>
+                            {{category.level}}
+                        </td>
+                        <td>
                             {{category.products.count}}
+                        </td>
+                        <td>
+                            <table>
+                            {% comment %} <thead>
+                                <th>Title</th>
+                                <th>Details</th>
+                                <th>Action</th>
+                            </thead> {% endcomment %}
+                            {% for c_title in category.titles.all %}
+                            <tr>
+                                <td> {{c_title.name}} </td>
+                                <td> 
+                                    <table class="">
+                                        {% comment %} <thead>
+                                            <th>Sub Category</th>
+                                            <th>Action</th>
+                                        </thead> {% endcomment %}
+                                        {% for sub_cat in c_title.subcategories.all %}
+                                        <tr>
+                                            <td> {{sub_cat.name}} </td>
+                                            <td>
+                                                <a href="{% url "update_sub_category" sub_cat.id %}"><i class="fa fa-edit" title="Update Sub Category" ></i></a>
+                                                <i class="fa fa-trash-alt" type="button" title="delete Sub Category" data-bs-toggle="modal" href="#deleteSubCatModal{{sub_cat.id}}" style="background:transparent;"></i>
+                                            </td>
+                                            <!-- Modal -->
+                    
+                                            <div class="modal fade" id="deleteSubCatModal{{sub_cat.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteSubCatModal{{sub_cat.id}}">Delete Sub Category</h5>
+
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure want to delete ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <a class="btn btn-danger" href="{% url 'delete_sub_category' sub_cat.id %}">Delete</a>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <!-- end Model -->
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </td>
+                                <td>
+                                    <a href="{% url "update_category_title" c_title.id %}"><i class="fa fa-edit" title="Update Category Title" ></i></a>
+                                    <i class="fa fa-trash-alt" type="button" title="Delete Category Title" data-bs-toggle="modal" href="#deleteCatTitleModal{{c_title.id}}" style="background:transparent;"></i>
+                                </td>
+                                <!-- Modal -->
+                    
+                                <div class="modal fade" id="deleteCatTitleModal{{c_title.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{c_title.id}}">Delete category title</h5>
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure want to delete ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a class="btn btn-danger" href="{% url 'delete_category_title' c_title.id %}">Delete</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <!-- end Model -->
+                            </tr>
+                            {% endfor %}
+                        </table>
                         </td>
                         <td>
                             <a href="{% url "update_category" category.id %}"><i class="fa fa-edit" title="Update" ></i></a>

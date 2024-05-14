@@ -15,7 +15,7 @@ from .exceptions import *
 class CategoryView(ModelViewSet):
     http_method_names = ('get',)
     serializer_class = CategoryListSerializer
-    queryset = Category.objects.select_related().all()
+    queryset = Category.objects.select_related().all().order_by('level')
     pagination_class = None
     
     def retrieve(self, request, *args, **kwargs):
@@ -30,8 +30,10 @@ class CategoryView(ModelViewSet):
 """
 class SubCategoryBannerView(ModelViewSet):
     http_method_names = ('get',)
-    serializer_class = SubCategoryListSerializer
-    queryset = SubCategory.objects.all()
+    serializer_class = SubCategoryNaturalProductListSerializer
+    
+    def get_queryset(self):
+        return SubCategory.objects.exclude(image='')
     
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -72,7 +74,7 @@ class ProductView(ModelViewSet):
         
         # Filter by Category
         if self.request.query_params.get('category'):
-            qs = qs.filter(category__id=self.request.query_params.get('category'))
+            qs = qs.filter(sub_category__category_title__category__id=self.request.query_params.get('category'))
             
         # Filter by Sub Category
         if self.request.query_params.get('sub_category'):

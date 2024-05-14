@@ -17,10 +17,11 @@
                 <thead class="thead-light">
                     <tr>
                         <th scope="col" class="sort" data-sort="name">SN</th>
+                        <th scope="col" class="sort" data-sort="name">Icon</th>
                         <th scope="col" class="sort" data-sort="name">Category</th>
                         <th scope="col" class="sort" data-sort="name">Category Title</th>
                         <th scope="col" class="sort" data-sort="name">Name</th>
-                        <th scope="col" class="sort" data-sort="budget">Description</th>
+                        <th scope="col" class="sort" data-sort="budget">Show on Natural Banner List?</th>
                         <th scope="col" class="sort" data-sort="budget">Number of Products</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -32,6 +33,9 @@
                             {{forloop.counter}}
                         </td>
                         <td>
+                            <img src="{{category.icon.url}}" class="image-sm"/>
+                        </td>
+                        <td>
                             {{category.category_title.category.name}}
                         </td>
                         <td>
@@ -41,7 +45,7 @@
                             {{category.name}}
                         </td>
                         <td>
-                            {{category.description}}
+                            {% if category.image %} Yes {% else %} No {% endif %}
                         </td>
                         <td>
                             {{category.products.count}}

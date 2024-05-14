@@ -18,6 +18,7 @@ class CategoryForm(forms.ModelForm):
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'level': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
@@ -61,7 +62,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = "__all__"
-        # exclude = ('benefits', 'how_to_use')
+        exclude = ('category', )
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),

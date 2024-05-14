@@ -27,9 +27,12 @@
                         <th scope="col" class="sort" data-sort="name">Image</th>
                         <th scope="col" class="sort" data-sort="name">Name</th>
                         <th scope="col" class="sort" data-sort="name">Category</th>
+                        <th scope="col" class="sort" data-sort="name">Sub Category</th>
                         <th scope="col" class="sort" data-sort="budget">Description</th>
                         <th scope="col" class="sort" data-sort="budget">Price</th>
+                        <th scope="col" class="sort" data-sort="budget">Discount</th>
                         <th scope="col" class="sort" data-sort="budget">Stock</th>
+                        <th scope="col" class="sort" data-sort="budget">Published ?</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -46,16 +49,26 @@
                             {{product.name}}
                         </td>
                         <td>
-                            {{product.category.name}}
+                            {{product.sub_category.category_title.category.name}}
+                        </td>
+                        <td>
+                            {{product.sub_category.name}}
                         </td>
                         <td>
                             {{product.description }}    
                         </td>
                         <td>
-                            {{product.price}} <span class="text-muted text-decoration-line-through"> {{product.list_price}} </span>
+                            {{product.price}}
+                            {% comment %} <span class="text-muted text-decoration-line-through"> {{product.list_price}} </span> {% endcomment %}
+                        </td>
+                        <td>
+                            {{product.discount_price}}
                         </td>
                         <td>
                             {{product.stock}}
+                        </td>
+                        <td>
+                            {% if product.status %} Yes {% else %} No {% endif %}
                         </td>
                         <td>
                             <a href="{% url 'list_productreviews' product.id %}" class="btn bg-gray-300 p-1 mx-2">Reviews </a>

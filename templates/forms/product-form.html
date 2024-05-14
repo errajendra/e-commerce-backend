@@ -1,0 +1,313 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="{% static 'choices.min.css' %}">
+<div class="row">
+    <div class="col">
+        <div class="card ">
+            <!-- Card header -->
+            <div class="card-header border-0 mx-md-7 mx-lg-8 mx-3">
+                <h3 class="mb-0">{{title}} </h3>
+            </div>
+            <!-- Light table -->
+            <div class="mx-md-7 mx-lg-8 mx-3">
+                {% if errors %}
+                    {{errors}}
+                {% endif %}
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="cWBzAUicLY4KBhptX707CARwenvAiiMKs426KI2E6Yklj2Zg1gsI2vV6t9GATvCr">
+                    
+                    <p>
+                        <label for="id_sub_category">Sub Category:</label>
+                        <select name="sub_category" class="form-control" required="" id="id_sub_category">
+                            <option value="" selected="">---------</option>
+                            {% for sc in sub_categories %}
+                          
+                                <option value="{{sc.id}}" {% if instance.sub_category.id == sc.id %} selected {% endif %}> {{sc}} </option>
+                            
+                            {% endfor %}
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="id_name">Product Name:</label>
+                        <input type="text" name="name" {% if instance.name %}value="{{instance.name}}"{% endif %}  class="form-control" maxlength="100" required="" id="id_name">
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_sub_name">Product Sort Description:</label>
+                        <input type="text" name="sub_name" {% if instance.sub_name %} value="{{instance.sub_name}}" {% endif %} class="form-control" maxlength="250" required="" id="id_sub_name">
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_description">Description:</label>
+                        <textarea name="description" {% if instance.description %} value="{{instance.description}}" {% endif %} class="form-control" id="id_description"></textarea>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_price">MRP:</label>
+                        <input type="number" name="price" {% if instance.price %} value="{{instance.price}}" {% endif %} class="form-control" step="any" required="" id="id_price">
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_discount_price">Discount Price:</label>
+                        <input type="number" name="discount_price" {% if instance.discount_price %} value="{{instance.discount_price}}" {% endif %} value="0" class="form-control" step="any" required="" id="id_discount_price">
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_stock">Stock Count:</label>
+                        <input type="number" name="stock" {% if instance.stock %} value="{{instance.stock}}" {% endif %} class="form-control" min="0" required="" id="id_stock">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_image1">Product Image 1:</label>
+                        <input type="file" name="image1" accept="image/*" id="id_image1">
+                        
+                        <span class="helptext">Upload Square Image</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_image2">Product Image 2:</label>
+                        <input type="file" name="image2" accept="image/*" id="id_image2">
+                        
+                        <span class="helptext">Upload Square Image</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_image3">Product Image 3:</label>
+                        <input type="file" name="image3" accept="image/*" id="id_image3">
+                        
+                        <span class="helptext">Upload Square Image</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_image4">Product Image 4:</label>
+                        <input type="file" name="image4" accept="image/*" id="id_image4">
+                        
+                        <span class="helptext">Upload Square Image</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_image5">Product Image 5:</label>
+                        <input type="file" name="image5" accept="image/*" id="id_image5">
+                        
+                        <span class="helptext">Upload Square Image</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_video">Product Video:</label>
+                        <input type="file" name="video" id="id_video">
+                        
+                        <span class="helptext">Upload Video less then 10 MB.</span>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_availability">Availability:</label>
+                        <select name="availability" class="form-control" id="id_availability">
+
+                            <option value="IN STOCK" {% if instance.availability == "IN STOCK" %} selected {% endif %}>IN STOCK</option>
+                            <option value="NOT IN STOCK" {% if instance.availability == "NOT IN STOCK" %} selected {% endif %}>NOT IN STOCK</option>
+                            <option value="UPCOMMING" {% if instance.availability == "UPCOMMING" %} selected {% endif %}>UPCOMMING</option>
+
+                        </select>
+                        
+                        
+                    </p>
+
+                    <p class="mt-5 text-info">
+                        Specifications-
+                    </p>
+                    
+                    <p>
+                        <label for="id_treatment">Treatment:</label>
+                        <input type="text" name="treatment" {% if instance.treatment %} value="{{instance.treatment}}" {% endif %} class="form-control" maxlength="50" id="id_treatment">
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_transparency">Transparency:</label>
+                        <input type="text" name="transparency" {% if instance.transparency %} value="{{instance.transparency}}"{% endif %} class="form-control" maxlength="50" id="id_transparency">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_shape">Shape:</label>
+                        <input type="text" name="shape" {% if instance.shape %} value="{{instance.shape}}" {% endif %} class="form-control" maxlength="50" id="id_shape">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_origin">Origin:</label>
+                        <input type="text" name="origin" {% if instance.origin %} value="{{instance.origin}}" {% endif %} class="form-control" maxlength="50" id="id_origin">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_color">Color:</label>
+                        <input type="text" name="color" {% if instance.color %} value="{{instance.color}}" {% endif %} class="form-control" maxlength="50" id="id_color">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_specific_gravity">Specific Gravity:</label>
+                        <input type="number" name="specific_gravity" {% if instance.specific_gravity %} value="{{instance.specific_gravity}}" {% endif %} class="form-control" id="id_specific_gravity">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_refractive_index">Refractive Index:</label>
+                        <input type="text" name="refractive_index" {% if instance.refractive_index %} value="{{instance.refractive_index}}" {% endif %} class="form-control" maxlength="50" id="id_refractive_index">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_exact_dimension">Exact Dimensions:</label>
+                        <input type="text" name="exact_dimension" {% if instance.exact_dimension %} value="{{instance.exact_dimension}}" {% endif %} class="form-control" maxlength="50" id="id_exact_dimension">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_weight">Weight (Ratti):</label>
+                        <input type="number" name="weight" {% if instance.weight %} value="{{instance.weight}}" {% endif %} class="form-control" step="any" id="id_weight">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_certification">Certification:</label>
+                        <input type="text" name="certification" {% if instance.certification %} value="{{instance.certification}}" {% endif %} class="form-control" maxlength="50" id="id_certification">
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_unit">Unit:</label>
+                        <select name="unit" class="form-control" id="id_unit">
+                            <option value="CARATS" {% if instance.unit == "CARATS" %} selected="" {% endif %} >CARATS</option>
+
+                            <option value="RATTI" {% if instance.unit == "RATTI" %} selected="" {% endif %} >RATTI</option>
+
+                        </select>
+                        
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_status">Published Status:</label>
+                        <input type="checkbox" name="status" id="id_status" {% if instance %}{% else %} checked {% endif %} {% if instance.status %} checked="" {% endif %}>
+                        
+                        <span class="helptext">If it is not active, the product will be hidden from the site.</span>
+                        
+                    </p>
+
+                    
+                    <p>
+                        <label for="id_is_featured">Is Featured?</label>
+                        <input type="checkbox" name="is_featured" {% if instance.is_featured %} checked="" {% endif %} id="id_is_featured">
+                        
+                    </p>
+
+
+                    <p>
+                        <label for="id_is_new_arrival">Is New Arrival?</label>
+                        <input type="checkbox" name="is_new_arrival" {% if instance.is_new_arrival %} checked="" {% endif %} id="id_is_new_arrival">
+                        
+                    </p>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" onclick="history.back()" class="btn btn-gray-400">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>  
+    </div>
+</div>
+ <!-- Include jQuery using a CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="{% static 'choices.min.js' %}"></script>
+
+
+<script>
+    $(document).ready(function(){
+
+        var multipleCancelButton1 = new Choices('#id_category', {
+            removeItemButton: true,
+            renderChoiceLimit:500
+        }); 
+
+        var multipleCancelButton1 = new Choices('#id_category_title', {
+            removeItemButton: true,
+            renderChoiceLimit:500
+        }); 
+
+        var multipleCancelButton1 = new Choices('#id_sub_category', {
+            removeItemButton: true,
+            renderChoiceLimit:500
+        }); 
+
+        var multipleCancelButton1 = new Choices('#id_product', {
+            removeItemButton: true,
+            renderChoiceLimit:500
+        });
+        
+        var multipleCancelButton1 = new Choices('#id_user', {
+            removeItemButton: true,
+            renderChoiceLimit:500
+        });
+        
+    });
+</script>
+{% endblock content %}

@@ -39,6 +39,16 @@ class CategoryListSerializer(serializers.ModelSerializer):
 class SubCategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
+        fields = ('id', 'name', 'icon')
+
+
+
+"""
+Used on Natural Product List Banner serializer using Sub Category model
+"""
+class SubCategoryNaturalProductListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
         fields = ('id', 'name', 'image')
 
 
@@ -121,7 +131,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['list_price'] = instance.list_price
+        # data['list_price'] = instance.list_price
         data['rating'] = instance.rating    # Returning Avg Rating of Product
         return data
 

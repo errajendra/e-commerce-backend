@@ -19,7 +19,6 @@
                         <th scope="col" class="sort" data-sort="name">SN</th>
                         <th scope="col" class="sort" data-sort="name">Category</th>
                         <th scope="col" class="sort" data-sort="name">Title</th>
-                        <th scope="col" class="sort" data-sort="budget">Description</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -34,9 +33,6 @@
                         </td>
                         <td>
                             {{category.name}}
-                        </td>
-                        <td>
-                            {{category.description}}
                         </td>
                         <td>
                             <a href="{% url "update_category_title" category.id %}"><i class="fa fa-edit" title="Update" ></i></a>
