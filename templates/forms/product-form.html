@@ -22,7 +22,7 @@
                     <p>
                         <label for="id_sub_category">Sub Category:</label>
                         <select name="sub_category" class="form-control" required="" id="id_sub_category">
-                            <option value="" selected="">---------</option>
+                            <option value="" {% if instance %} {% else %} selected="" {% endif %}>---------</option>
                             {% for sc in sub_categories %}
                           
                                 <option value="{{sc.id}}" {% if instance.sub_category.id == sc.id %} selected {% endif %}> {{sc}} </option>

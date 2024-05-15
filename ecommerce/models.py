@@ -102,7 +102,7 @@ class CategoryTitle(BaseModel):
     name = models.CharField("Category Title Name", max_length=100)
 
     def __str__(self):
-        return self.name
+        return str(self.name) + " > " + str(self.category)
 
 
 
@@ -127,7 +127,7 @@ class SubCategory(BaseModel):
         )
 
     def __str__(self):
-        return self.name
+        return str(self.name) + " > " + str(self.category_title)
 
 
 
@@ -227,7 +227,7 @@ class Product(BaseModel):
         """
         Returns the name of the product.
         """
-        return f"{self.name} ({self.price}) - {self.category.name}"
+        return f"{self.name} ({self.price})"
 
     @property
     def list_price(self):
