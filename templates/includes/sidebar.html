@@ -135,6 +135,15 @@
           <span class="sidebar-text">Reviews</span>
         </a>
       </li>
+
+      <li class="nav-item {% if request.resolver_match.view_name == 'update-constance' %} active {% endif %}">
+        <a href="{% url 'update-constance' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <i class="fas fa-cog"></i>
+          </span>
+          <span class="sidebar-text">Setting</span>
+        </a>
+      </li>
       
       
       {% endif %}

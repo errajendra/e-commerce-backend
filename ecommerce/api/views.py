@@ -3,9 +3,11 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Sum
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from .serializers import *
 from .exceptions import *
+from constance import config
 
 
 # Auther: Rajendra
@@ -375,3 +377,25 @@ class ReviewView(ModelViewSet):
     def update(self, request, *args, **kwargs):
         self.queryset = Review.objects.filter(user=request.user)
         return super().update(request, *args, **kwargs)
+
+
+
+@api_view(["POST"])
+def get_service_area_by_zipcode(request, format=None):
+    zip_code = request.data.get("zip_code").strip()
+    service_area = [i.strip() for i in config.SERVICEABLE_AREA_ZIPCODE.strip().split(',')]
+    allowed = False
+    
+    if zip_code in service_area:
+        allowed = True
+        message = "OK"
+    
+    else:
+        allowed = False
+        message = "This location is out of our service area."
+    
+    return Response({
+        "status": 200,
+        "allowed": allowed,
+        "message": message,
+    })

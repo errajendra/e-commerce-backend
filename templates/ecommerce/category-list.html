@@ -22,7 +22,7 @@
                         <th scope="col" class="sort" data-sort="name">Name</th>
                         <th scope="col" class="sort" data-sort="name">Level on Menu</th>
                         <th scope="col" class="sort" data-sort="budget">Number of Products</th>
-                        <th scope="col" class="sort" data-sort="name">Detail</th>
+                        <th scope="col" class="sort" data-sort="name">Title</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -42,21 +42,21 @@
                             {{category.products.count}}
                         </td>
                         <td>
-                            <table>
-                            {% comment %} <thead>
+                            <table class="table-bordered">
+                            <thead>
                                 <th>Title</th>
-                                <th>Details</th>
+                                <th>Sub Category</th>
                                 <th>Action</th>
-                            </thead> {% endcomment %}
+                            </thead>
                             {% for c_title in category.titles.all %}
                             <tr>
                                 <td> {{c_title.name}} </td>
                                 <td> 
                                     <table class="">
-                                        {% comment %} <thead>
+                                        <thead>
                                             <th>Sub Category</th>
                                             <th>Action</th>
-                                        </thead> {% endcomment %}
+                                        </thead>
                                         {% for sub_cat in c_title.subcategories.all %}
                                         <tr>
                                             <td> {{sub_cat.name}} </td>

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'user.apps.UserConfig',
     'ecommerce.apps.EcommerceConfig',
+    'constance',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,18 @@ REST_FRAMEWORK = {
     
     'DEFAULT_PAGINATION_CLASS': 'pagination.CustumPageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+# https://django-constance.readthedocs.io/en/latest/
+CONSTANCE_CONFIG = {
+    'SERVICEABLE_AREA_ZIPCODE': ("560076,560068", 'Enter comman separated zip codes of your serviceable area'),
+}
+CONSTANCE_CONFIG_FIELDSETS = {
+    'General Options': ('SERVICEABLE_AREA_ZIPCODE',),
 }
 
 

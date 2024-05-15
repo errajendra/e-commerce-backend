@@ -166,11 +166,11 @@ class Product(BaseModel):
         _('Discount Price'), default=0
     )
     stock = models.PositiveIntegerField(_('Stock Count'), default=0)
-    image1 = models.ImageField(_("Product Image 1"), upload_to='products/', default='product-default.jpg', help_text="Upload Square Image")
-    image2 = models.ImageField(_("Product Image 2"), upload_to='products/', default='product-default.jpg', help_text="Upload Square Image")
-    image3 = models.ImageField(_("Product Image 3"), upload_to='products/', default='product-default.jpg', help_text="Upload Square Image")
-    image4 = models.ImageField(_("Product Image 4"), upload_to='products/', default='product-default.jpg', help_text="Upload Square Image")
-    image5 = models.ImageField(_("Product Image 5"), upload_to='products/', default='product-default.jpg', help_text="Upload Square Image")
+    image1 = models.ImageField(_("Product Image 1"), upload_to='products/', default='product-default.jpg', help_text="Upload image with height=530 px and width=530 px")
+    image2 = models.ImageField(_("Product Image 2"), upload_to='products/', null=True, blank=True, help_text="Upload image with height=530 px and width=530 px")
+    image3 = models.ImageField(_("Product Image 3"), upload_to='products/', null=True, blank=True, help_text="Upload image with height=530 px and width=530 px")
+    image4 = models.ImageField(_("Product Image 4"), upload_to='products/', null=True, blank=True, help_text="Upload image with height=530 px and width=530 px")
+    image5 = models.ImageField(_("Product Image 5"), upload_to='products/', null=True, blank=True, help_text="Upload image with height=530 px and width=530 px")
     video = models.FileField(
         _("Product Video"), upload_to='product-video/', null=True, blank=True,
         max_length=500,

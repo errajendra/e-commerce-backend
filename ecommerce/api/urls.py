@@ -10,6 +10,7 @@ from .views import (
     UserAddressView,
     BlogView,
     ReviewView, ReviewListView,
+    get_service_area_by_zipcode,
 )
 
 router = DefaultRouter()
@@ -36,4 +37,5 @@ urlpatterns = [
     # router.urls is a list of URL patterns that are automatically created by
     # the router based on your viewset(s).
     path("", include(router.urls)),
+    path('check-service-area-by-zipcode/', get_service_area_by_zipcode, name='check-service-area-by-zipcode-api'),
 ]

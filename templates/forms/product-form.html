@@ -77,9 +77,12 @@
                     
                     <p>
                         <label for="id_image1">Product Image 1:</label>
+                        {% if instance.image1 %}
+                        "Current": <a href="{{ instance.image1.url }}">{{ instance.image1.name }} </a>
+                        {% endif %} 
                         <input type="file" name="image1" accept="image/*" id="id_image1">
                         
-                        <span class="helptext">Upload Square Image</span>
+                        <span class="helptext">Upload image with height=530 px and width=530 px</span>
                         
                         
                     </p>
@@ -87,9 +90,12 @@
                     
                     <p>
                         <label for="id_image2">Product Image 2:</label>
-                        <input type="file" name="image2" accept="image/*" id="id_image2">
+                        {% if instance.image2 %}
+                        "Current": <a href="{{ instance.image2.url }}">{{ instance.image2.name }} </a>
+                        {% endif %} 
+                        <input type="file" name="image2" {% if instance.image2 %} value="{{ instance.image2 }}" {% endif %} accept="image/*" id="id_image2">
                         
-                        <span class="helptext">Upload Square Image</span>
+                        <span class="helptext">Upload image with height=530 px and width=530 px</span>
                         
                         
                     </p>
@@ -97,9 +103,12 @@
                     
                     <p>
                         <label for="id_image3">Product Image 3:</label>
-                        <input type="file" name="image3" accept="image/*" id="id_image3">
+                        {% if instance.image3 %}
+                        "Current": <a href="{{ instance.image3.url }}">{{ instance.image3.name }} </a>
+                        {% endif %} 
+                        <input type="file" name="image3" {% if instance.image3 %} value="{{ instance.image3 }}" {% endif %} accept="image/*" id="id_image3">
                         
-                        <span class="helptext">Upload Square Image</span>
+                        <span class="helptext">Upload image with height=530 px and width=530 px</span>
                         
                         
                     </p>
@@ -107,9 +116,12 @@
                     
                     <p>
                         <label for="id_image4">Product Image 4:</label>
-                        <input type="file" name="image4" accept="image/*" id="id_image4">
+                        {% if instance.image4 %}
+                        "Current": <a href="{{ instance.image4.url }}">{{ instance.image4.name }} </a>
+                        {% endif %} 
+                        <input type="file" name="image4" {% if instance.image4 %} value="{{ instance.image4 }}" {% endif %} accept="image/*" id="id_image4">
                         
-                        <span class="helptext">Upload Square Image</span>
+                        <span class="helptext">Upload image with height=530 px and width=530 px</span>
                         
                         
                     </p>
@@ -117,9 +129,12 @@
                     
                     <p>
                         <label for="id_image5">Product Image 5:</label>
-                        <input type="file" name="image5" accept="image/*" id="id_image5">
+                        {% if instance.image5 %}
+                        "Current": <a href="{{ instance.image5.url }}">{{ instance.image5.name }} </a>
+                        {% endif %} 
+                        <input type="file" name="image5" {% if instance.image5 %} value="{{ instance.image5 }}" {% endif %} accept="image/*" id="id_image5">
                         
-                        <span class="helptext">Upload Square Image</span>
+                        <span class="helptext">Upload image with height=530 px and width=530 px</span>
                         
                         
                     </p>
@@ -127,7 +142,10 @@
                     
                     <p>
                         <label for="id_video">Product Video:</label>
-                        <input type="file" name="video" id="id_video">
+                        {% if instance.video %}
+                        "Current": <a href="{{ instance.video.url }}">{{ instance.video.name }} </a>
+                        {% endif %} 
+                        <input type="file" name="video" id="id_video" {% if instance.video %} value="{{ instance.video }}" {% endif %} >
                         
                         <span class="helptext">Upload Video less then 10 MB.</span>
                         
