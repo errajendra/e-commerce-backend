@@ -17,7 +17,7 @@
                     {{errors}}
                 {% endif %}
                 <form method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="cWBzAUicLY4KBhptX707CARwenvAiiMKs426KI2E6Yklj2Zg1gsI2vV6t9GATvCr">
+                    {% csrf_token %}
                     
                     <p>
                         <label for="id_sub_category">Sub Category:</label>
