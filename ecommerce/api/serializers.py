@@ -5,7 +5,7 @@ from ..models import (
     Cart, Order, OrderProduct, Transaction,
     UserAddress,
     Blog, Review,
-    CategoryTitle, SubCategory,
+    CategoryTitle, SubCategory,ContactUs
 )
 from user.api.serializers import UserInfoSerializer
 
@@ -60,7 +60,10 @@ class CategoryTitleSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["sub_categories"] = SubCategoryListSerializer(instance.subcategories.all(), many=True).data
+        data["sub_categories"] = SubCategoryListSerializer(
+            instance.subcategories.filter(
+                products__isnull=False).distinct(),
+            many=True).data
         return data
 
 
@@ -126,7 +129,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id', 'category', 'name', 'sub_name',
-            'price', 'is_featured', 'is_new_arrival', 'image1'
+            'price', 'discount_price', 'is_featured', 'is_new_arrival', 'image1'
         )
         
     def to_representation(self, instance):
@@ -358,3 +361,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['user'] = UserInfoSerializer(instance.user).data
         return data
+
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    """
+    Contact US Serializer
+    """
+    class Meta:
+        model = ContactUs
+        fields = "__all__"

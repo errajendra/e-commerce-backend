@@ -17,8 +17,15 @@ from constance import config
 class CategoryView(ModelViewSet):
     http_method_names = ('get',)
     serializer_class = CategoryListSerializer
-    queryset = Category.objects.select_related().all().order_by('level')
     pagination_class = None
+    
+    def get_queryset(self):
+        product_in_cat = Product.objects.filter(
+            status=True).values_list("sub_category__category_title__category", flat=True)
+        cat_ids = tuple(set(product_in_cat))
+        queryset = Category.objects.select_related().filter(
+            id__in = cat_ids).distinct().order_by('level')
+        return queryset
     
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = CategoryDetailSerializer
@@ -72,7 +79,15 @@ class ProductView(ModelViewSet):
     serializer_class = ProductListSerializer
     
     def get_queryset(self):
-        qs = Product.objects.select_related().all()
+        qs = Product.objects.select_related().filter(status=True)
+        
+        # Filter by Featured
+        if self.request.query_params.get('is_featured'):
+            qs = qs.filter(is_featured=True)
+        
+        # Filter by New Arrivals
+        if self.request.query_params.get('is_new_arrival'):
+            qs = qs.filter(is_new_arrival=True)
         
         # Filter by Category
         if self.request.query_params.get('category'):
@@ -90,9 +105,6 @@ class ProductView(ModelViewSet):
                 Q(description__icontains = self.request.query_params.get('search')) |
                 Q(category__name__icontains = self.request.query_params.get('search'))
             )
-        
-        if self.request.query_params.get('is_new_arrival'):
-            qs = qs.filter(is_new_arrival=True)
         
         # Sorting by Price
         sort_by = self.request.query_params.get('sort')
@@ -399,3 +411,11 @@ def get_service_area_by_zipcode(request, format=None):
         "allowed": allowed,
         "message": message,
     })
+
+
+
+class ConactUsView(ModelViewSet):
+    http_method_names = ("post", )
+    serializer_class = ContactUsSerializer
+    queryset = ContactUs.objects.all()
+    

@@ -3,6 +3,7 @@ from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from user.utils import phone_validator
 from user.models import BaseModel, CustomUser as User, _
 
 
@@ -451,3 +452,24 @@ class Review(BaseModel):
         """
         return f'{self.user} - {self.rating}'
 
+
+
+class ContactUs(BaseModel):
+    """
+    A model representing a Contact or Help.
+    """
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, null=True, blank=True)
+    mobile_number = models.CharField(
+        _("Mobile Number"), max_length=20,
+        validators = [phone_validator],
+        null=True, blank=True
+    )
+    message = models.TextField('Message', null=True, blank=True)
+    status = models.BooleanField('Status', default=True)
+
+    def __str__(self):
+        """
+        Returns the user and rating for the review.
+        """
+        return f'{self.name} - {self.mobile_number}'

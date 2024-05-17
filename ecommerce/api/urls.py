@@ -11,6 +11,7 @@ from .views import (
     BlogView,
     ReviewView, ReviewListView,
     get_service_area_by_zipcode,
+    ConactUsView
 )
 
 router = DefaultRouter()
@@ -32,6 +33,7 @@ router.register('re-order', ReOrderlView, basename='re-order')
 router.register('transactions', TransactionListView, basename='transactions')
 router.register('review', ReviewView, basename='review')
 router.register('reviews', ReviewListView, basename='reviews')
+router.register('contact-us', ConactUsView, basename='conatct_us_api')
 
 urlpatterns = [
     # router.urls is a list of URL patterns that are automatically created by

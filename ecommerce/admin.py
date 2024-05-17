@@ -144,3 +144,10 @@ class AdminReview(admin.ModelAdmin):
     list_editable = ('status', 'rating',)
     search_fields = ('review',
         'user__name', 'user__email', 'user__mobile_number')
+
+
+@admin.register(ContactUs)
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'mobile_number', 'email', 'message', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('name', 'mobile_number', 'email', 'message',)
